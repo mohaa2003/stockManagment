@@ -1,5 +1,9 @@
-import Image from "next/image";
+import Achats from "./pages/achats/page";
 
 export default function Home() {
-  return ;
+  return(
+    <>
+      <Achats/>
+    </>
+  ) ;
 }

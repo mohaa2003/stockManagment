@@ -1,0 +1,11 @@
+main{
+    grid-template-areas: "aside container container container container container container container container container container container container container container container container container container container";
+}
+
+aside{
+    grid-area: aside;
+}
+
+section{
+    grid-area: container;
+}
