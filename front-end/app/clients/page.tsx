@@ -1,7 +1,6 @@
 import Aside from "@/app/components/aside/aside";
-import "./page.css" ;
 
-const Achats : React.FC = () => {
+const Clients : React.FC = () => {
     return(
         <main className="h-screen grid rounded-lg">
             <Aside/>
@@ -11,4 +10,4 @@ const Achats : React.FC = () => {
         </main>
     );
 }
-export default Achats;
+export default Clients;

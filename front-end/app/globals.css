@@ -1,3 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
 main{
     grid-template-areas: "aside container container container container container container container container container container container container container container container container container container container";
 }
@@ -9,3 +18,4 @@ aside{
 section{
     grid-area: container;
 }
+
