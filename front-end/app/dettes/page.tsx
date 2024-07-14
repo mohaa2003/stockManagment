@@ -1,12 +1,11 @@
 import Aside from "@/app/components/aside/aside";
+import Section from "../components/section/section";
 
 const Dettes : React.FC = () => {
     return(
         <main className="h-screen grid rounded-lg">
             <Aside/>
-            <section className="h-full bg-slate-100 rounded-r-lg">
-
-            </section>
+            <Section/>
         </main>
     );
 }

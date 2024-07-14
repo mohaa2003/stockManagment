@@ -1,4 +1,4 @@
-package com.stockManagment.api.categorie;
+package com.stockManagment.api.produit;
 
-public class CategorieService {
+public class ProduitService {
 }

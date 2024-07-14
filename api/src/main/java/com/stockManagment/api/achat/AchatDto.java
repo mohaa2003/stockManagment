@@ -1,2 +1,5 @@
-package com.stockManagment.api.achat;public class AchatDto {
+package com.stockManagment.api.achat;
+
+public class AchatDto {
+
 }

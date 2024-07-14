@@ -1,4 +1,4 @@
-package com.stockManagment.api.categorie;
+package com.stockManagment.api.client;
 
-public class CategorieController {
+public class ClientController {
 }

@@ -1,6 +1,16 @@
-package com.stockManagment.api.model;
+package com.stockManagment.api.utilisateur;
 
 import com.stockManagment.api.SuperEntity;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public class User  extends SuperEntity {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "utilisateur" )
+public class Utilisateur extends SuperEntity {
 }

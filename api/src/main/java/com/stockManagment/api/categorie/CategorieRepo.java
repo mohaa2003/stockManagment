@@ -1,4 +1,4 @@
-package com.stockManagment.api.achat;
+package com.stockManagment.api.categorie;
 
-public class AchatRepo {
+public class CategorieRepo {
 }

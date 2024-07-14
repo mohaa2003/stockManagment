@@ -1,2 +1,7 @@
-package com.stockManagment.api.achat;public enum MethodePayement {
+package com.stockManagment.api.achat;
+
+public enum MethodePayement {
+    CASH,
+    CCP,
+    BANQUE
 }

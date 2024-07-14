@@ -1,4 +1,4 @@
-package com.stockManagment.api.categorie;
+package com.stockManagment.api.transaction;
 
-public class CategorieController {
+public class TransactionController {
 }

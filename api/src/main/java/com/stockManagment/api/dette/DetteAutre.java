@@ -1,2 +1,4 @@
-package com.stockManagment.api.dette;public class DetteAutre {
+package com.stockManagment.api.dette;
+
+public class DetteAutre extends Dette{
 }

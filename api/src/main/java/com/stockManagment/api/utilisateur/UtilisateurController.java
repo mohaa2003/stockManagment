@@ -1,4 +1,4 @@
 package com.stockManagment.api.utilisateur;
 
-public class CategorieController {
+public class UtilisateurController {
 }

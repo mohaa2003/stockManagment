@@ -1,4 +1,4 @@
-package com.stockManagment.api.categorie;
+package com.stockManagment.api.fournisseur;
 
-public class CategorieController {
+public class FournisseurController {
 }

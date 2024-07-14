@@ -1,4 +1,4 @@
-package com.stockManagment.api.categorie;
+package com.stockManagment.api.dette;
 
-public class CategorieController {
+public class DetteController {
 }

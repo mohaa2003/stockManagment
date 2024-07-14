@@ -1,4 +1,7 @@
-package com.stockManagment.api.model;
+package com.stockManagment.api.achat;
 
 public enum StstutPayement {
+    PAYEE,
+    NON_PAYEE,
+    PARTIELLEMENT_PAYEE
 }

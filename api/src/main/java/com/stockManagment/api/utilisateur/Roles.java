@@ -1,4 +1,4 @@
-package com.stockManagment.api.model;
+package com.stockManagment.api.utilisateur;
 
 public enum Roles {
     USER,

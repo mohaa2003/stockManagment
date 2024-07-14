@@ -1,4 +1,4 @@
-package com.stockManagment.api.categorie;
+package com.stockManagment.api.transaction;
 
-public class CategorieDto {
+public class TransactionDto {
 }

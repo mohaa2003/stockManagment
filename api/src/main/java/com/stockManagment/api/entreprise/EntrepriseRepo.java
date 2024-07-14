@@ -1,4 +1,4 @@
-package com.stockManagment.api.categorie;
+package com.stockManagment.api.entreprise;
 
-public class CategorieRepo {
+public class EntrepriseRepo {
 }
