@@ -1,2 +1,8 @@
-package com.stockManagment.api.versement;public class VersementController {
+package com.stockManagment.api.versement;
+
+
+
+public class VersementController{
+
+
 }

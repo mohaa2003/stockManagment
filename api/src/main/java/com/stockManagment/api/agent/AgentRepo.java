@@ -1,2 +1,4 @@
-package com.stockManagment.api.agent;public class AgentRepo {
+package com.stockManagment.api.agent;
+
+public class AgentRepo {
 }

@@ -1,10 +1,7 @@
 package com.stockManagment.api.dette;
 
 import com.stockManagment.api.SuperEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,5 +13,9 @@ import lombok.NoArgsConstructor;
 @Table(name = "dette" )
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Dette  extends SuperEntity {
-
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type_de_dette" ,nullable = false)
+    private DetteType typeDette;
+    @Column(name = "some" ,nullable = false)
+    private double some;
 }

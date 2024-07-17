@@ -1,2 +1,4 @@
-package com.stockManagment.api.versement;public class VersementDto {
+package com.stockManagment.api.versement;
+
+public class VersementDto {
 }

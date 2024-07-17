@@ -1,6 +1,6 @@
 package com.stockManagment.api.achat;
 
-public enum StstutPayement {
+public enum StatutPayement {
     PAYEE,
     NON_PAYEE,
     PARTIELLEMENT_PAYEE
