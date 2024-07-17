@@ -1,4 +1,4 @@
-package com.stockManagment.api.achat;
+package com.stockManagment.api.compte;
 
 public enum MethodePayement {
     CASH,
