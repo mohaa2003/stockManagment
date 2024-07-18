@@ -2,6 +2,7 @@ package com.stockManagment.api.compte;
 
 import com.stockManagment.api.SuperEntity;
 import com.stockManagment.api.achat.Achat;
+import com.stockManagment.api.entreprise.Entreprise;
 import com.stockManagment.api.transaction.Transaction;
 import com.stockManagment.api.vente.Vente;
 import com.stockManagment.api.versement.Versement;
@@ -37,6 +38,10 @@ public class Compte  extends SuperEntity {
 
     @OneToMany(mappedBy = "compte")
     private List<Transaction> transaction;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_entreprise")
+    private Entreprise entreprise;
 
 
 }

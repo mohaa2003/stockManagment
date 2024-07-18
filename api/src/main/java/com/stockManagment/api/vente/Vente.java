@@ -5,6 +5,7 @@ import com.stockManagment.api.achat.Achat;
 import com.stockManagment.api.client.Client;
 import com.stockManagment.api.compte.Compte;
 import com.stockManagment.api.compte.TypeCompte;
+import com.stockManagment.api.entreprise.Entreprise;
 import com.stockManagment.api.ligneVente.LigneVente;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -35,6 +36,10 @@ public class Vente  extends SuperEntity {
     @ManyToOne
     @JoinColumn(name = "id_compte",nullable = false)
     private Compte compte;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_entreprise")
+    private Entreprise entreprise;
 
 //    Double calculPrixFacture(){
 //

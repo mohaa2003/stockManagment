@@ -1,6 +1,8 @@
 package com.stockManagment.api.client;
 
 import com.stockManagment.api.SuperEntity;
+import com.stockManagment.api.dette.DetteClient;
+import com.stockManagment.api.entreprise.Entreprise;
 import com.stockManagment.api.produit.Produit;
 import com.stockManagment.api.vente.Vente;
 import com.stockManagment.api.versement.VersementClient;
@@ -31,6 +33,14 @@ public class Client  extends SuperEntity {
 
     @OneToMany(mappedBy = "client")
     private List<VersementClient> versementClientList ;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "dette_id")
+    private DetteClient detteClient;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_entreprise")
+    private Entreprise entreprise;
 
 //    date de 1er achat ... et de dernier achat
 }

@@ -9,7 +9,7 @@ import jakarta.persistence.ManyToOne;
 
 public class VersementAutre extends Versement{
     @ManyToOne
-    @JoinColumn(name = "id_dette",nullable = false)
+    @JoinColumn(name = "id_dette")
     private DetteAutre detteAutre;
 
     @ManyToOne

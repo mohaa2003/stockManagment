@@ -2,12 +2,11 @@ package com.stockManagment.api.fournisseur;
 
 import com.stockManagment.api.SuperEntity;
 import com.stockManagment.api.achat.Achat;
+import com.stockManagment.api.dette.DetteFournisseur;
+import com.stockManagment.api.entreprise.Entreprise;
 import com.stockManagment.api.vente.Vente;
 import com.stockManagment.api.versement.VersementFournisseur;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,4 +31,12 @@ public class Fournisseur  extends SuperEntity {
 
     @OneToMany(mappedBy = "fournisseur")
     private List<VersementFournisseur> versementFournisseurList ;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_dette")
+    private DetteFournisseur detteFournisseur;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_entreprise")
+    private Entreprise entreprise;
 }

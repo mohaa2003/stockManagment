@@ -3,6 +3,7 @@ package com.stockManagment.api.produit;
 import com.stockManagment.api.SuperEntity;
 import com.stockManagment.api.achat.Achat;
 import com.stockManagment.api.categorie.Categorie;
+import com.stockManagment.api.entreprise.Entreprise;
 import com.stockManagment.api.ligneAchat.LigneAchat;
 import com.stockManagment.api.ligneVente.LigneVente;
 import com.stockManagment.api.vente.Vente;
@@ -37,4 +38,8 @@ public class Produit  extends SuperEntity {
     @ManyToOne
     @JoinColumn(name = "id_categorie",nullable = false)
     private Categorie categorie;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_entreprise")
+    private Entreprise entreprise;
 }

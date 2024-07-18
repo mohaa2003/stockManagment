@@ -13,6 +13,6 @@ public class VersementClient extends Versement{
     private Client client;
 
     @ManyToOne
-    @JoinColumn(name = "id_dette",nullable = false)
+    @JoinColumn(name = "id_dette")
     private DetteClient detteClient;
 }

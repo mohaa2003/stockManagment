@@ -1,6 +1,7 @@
 package com.stockManagment.api.dette;
 
 import com.stockManagment.api.SuperEntity;
+import com.stockManagment.api.entreprise.Entreprise;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,4 +19,8 @@ public class Dette  extends SuperEntity {
     private DetteType typeDette;
     @Column(name = "some" ,nullable = false)
     private double some;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_entreprise")
+    private Entreprise entreprise;
 }
