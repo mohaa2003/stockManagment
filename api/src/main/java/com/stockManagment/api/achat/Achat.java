@@ -46,7 +46,7 @@ public class Achat extends SuperEntity {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_entreprise")
-    private Entreprise entreprise;
+    private Entreprise entreprise;y
 
 //    Double calculPrixFacture(){
 //

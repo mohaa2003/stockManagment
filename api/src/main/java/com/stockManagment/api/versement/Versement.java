@@ -14,12 +14,13 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "versement" )
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "versement_type", discriminatorType = DiscriminatorType.STRING)
 public class Versement extends SuperEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "type_de_dette" ,nullable = false)
     private DetteType typeDette;
     @Column(nullable = false)
-    private double some;
+    private Double some;
 
     @ManyToOne
     @JoinColumn(name = "id_compte",nullable = false)

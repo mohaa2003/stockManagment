@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "dette" )
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "dette_type", discriminatorType = DiscriminatorType.STRING)
 public class Dette  extends SuperEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "type_de_dette" ,nullable = false)
