@@ -28,7 +28,7 @@ public class VersementAutreDto extends VersementDto {
                 entity.getTypeDette(),
                 entity.getSome(),
                 CompteDto.fromEntity(entity.getCompte()),
-                DetteAutreDto.fromEntity(entity.getDetteAutre()),
+                (DetteAutreDto) DetteAutreDto.fromEntity(entity.getDette()),
                 AgentDto.fromEntity(entity.getAgent())
         );
     }
@@ -42,7 +42,7 @@ public class VersementAutreDto extends VersementDto {
         entity.setTypeDette(dto.getTypeDette());
         entity.setSome(dto.getSome());
         entity.setCompte(CompteDto.toEntity(dto.getCompte()));
-        entity.setDetteAutre(DetteAutreDto.toEntity(dto.getDetteAutre()));
+        entity.setDette(DetteAutreDto.toEntity(dto.getDetteAutre()));
         entity.setAgent(AgentDto.toEntity(dto.getAgent()));
         return entity;
     }

@@ -31,7 +31,7 @@ public class DetteAutreDto extends DetteDto {
                 entity.getTypeDette(),
                 entity.getSome(),
                 EntrepriseDto.fromEntity(entity.getEntreprise()),
-                entity.getVersementAutreListList().stream().map(VersementAutreDto::fromEntity).collect(Collectors.toList()),
+                entity.getVersementAutreList().stream().map(VersementAutreDto::fromEntity).collect(Collectors.toList()),
                 AgentDto.fromEntity(entity.getAgent())
         );
     }
@@ -45,7 +45,7 @@ public class DetteAutreDto extends DetteDto {
         entity.setTypeDette(dto.getTypeDette());
         entity.setSome(dto.getSome());
         entity.setEntreprise(EntrepriseDto.toEntity(dto.getEntreprise()));
-        entity.setVersementAutreListList(dto.getVersementAutreListList().stream().map(VersementAutreDto::toEntity).collect(Collectors.toList()));
+        entity.setVersementAutreList(dto.getVersementAutreListList().stream().map(VersementAutreDto::toEntity).collect(Collectors.toList()));
         entity.setAgent(AgentDto.toEntity(dto.getAgent()));
         return entity;
     }

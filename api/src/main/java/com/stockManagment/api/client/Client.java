@@ -1,6 +1,7 @@
 package com.stockManagment.api.client;
 
 import com.stockManagment.api.SuperEntity;
+import com.stockManagment.api.dette.Dette;
 import com.stockManagment.api.dette.DetteClient;
 import com.stockManagment.api.entreprise.Entreprise;
 import com.stockManagment.api.produit.Produit;
@@ -35,8 +36,8 @@ public class Client  extends SuperEntity {
     private List<VersementClient> versementClientList ;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "dette_id")
-    private DetteClient detteClient;
+    @JoinColumn(name = "id_dette")
+    private Dette dette;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_entreprise")

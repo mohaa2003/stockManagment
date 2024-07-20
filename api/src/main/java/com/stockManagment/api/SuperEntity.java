@@ -5,6 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
+@MappedSuperclass
 public class SuperEntity implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

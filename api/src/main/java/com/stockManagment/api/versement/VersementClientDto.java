@@ -4,7 +4,6 @@ import com.stockManagment.api.client.ClientDto;
 import com.stockManagment.api.compte.CompteDto;
 import com.stockManagment.api.dette.DetteClientDto;
 import com.stockManagment.api.dette.DetteType;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -30,7 +29,7 @@ public class VersementClientDto extends VersementDto {
                 entity.getSome(),
                 CompteDto.fromEntity(entity.getCompte()),
                 ClientDto.fromEntity(entity.getClient()),
-                DetteClientDto.fromEntity(entity.getDetteClient())
+                (DetteClientDto) DetteClientDto.fromEntity(entity.getDette())
         );
     }
 
@@ -44,7 +43,7 @@ public class VersementClientDto extends VersementDto {
         entity.setSome(dto.getSome());
         entity.setCompte(CompteDto.toEntity(dto.getCompte()));
         entity.setClient(ClientDto.toEntity(dto.getClient()));
-        entity.setDetteClient(DetteClientDto.toEntity(dto.getDetteClient()));
+        entity.setDette(DetteClientDto.toEntity(dto.getDetteClient()));
         return entity;
     }
 }

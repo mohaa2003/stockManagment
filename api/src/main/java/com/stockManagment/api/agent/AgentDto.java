@@ -37,8 +37,8 @@ public class AgentDto {
                 agent.getNumTlph(),
                 agent.getFonction(),
                 agent.getTransactionList().stream().map(TransactionDto::fromEntity).collect(Collectors.toList()),
-                agent.getVersementAutreList().stream().map(VersementAutreDTO::fromEntity).collect(Collectors.toList()),
-                DetteAutreDto.fromEntity(agent.getDetteAutre()),
+                agent.getVersementAutreList().stream().map(VersementAutreDto::fromEntity).collect(Collectors.toList()),
+                (DetteAutreDto) DetteAutreDto.fromEntity(agent.getDette()),
                 EntrepriseDto.fromEntity(agent.getEntreprise())
         );
     }
@@ -56,7 +56,7 @@ public class AgentDto {
         agent.setFonction(agentDto.getFonction());
         agent.setTransactionList(agentDto.getTransactionList().stream().map(TransactionDto::toEntity).collect(Collectors.toList()));
         agent.setVersementAutreList(agentDto.getVersementAutreList().stream().map(VersementAutreDto::toEntity).collect(Collectors.toList()));
-        agent.setDetteAutre(DetteAutreDto.toEntity(agentDto.getDetteAutre()));
+        agent.setDette(DetteAutreDto.toEntity(agentDto.getDetteAutre()));
         agent.setEntreprise(EntrepriseDto.toEntity(agentDto.getEntreprise()));
 
         return agent;

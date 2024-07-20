@@ -18,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "achat" )
+
 public class Achat extends SuperEntity {
     @Column(name = "prix_achat")
     private Double prixAchatTotal; //initialise par la valeur total des lignes d'achat
@@ -46,7 +47,8 @@ public class Achat extends SuperEntity {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_entreprise")
-    private Entreprise entreprise;y
+    private Entreprise entreprise;
+
 
 //    Double calculPrixFacture(){
 //

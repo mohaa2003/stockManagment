@@ -28,7 +28,7 @@ public class VersementFournisseurDto extends VersementDto {
                 entity.getTypeDette(),
                 entity.getSome(),
                 CompteDto.fromEntity(entity.getCompte()),
-                DetteFournisseurDto.fromEntity(entity.getDetteFournisseur()),
+                (DetteFournisseurDto) DetteFournisseurDto.fromEntity(entity.getDette()),
                 FournisseurDto.fromEntity(entity.getFournisseur())
         );
     }
@@ -42,7 +42,7 @@ public class VersementFournisseurDto extends VersementDto {
         entity.setTypeDette(dto.getTypeDette());
         entity.setSome(dto.getSome());
         entity.setCompte(CompteDto.toEntity(dto.getCompte()));
-        entity.setDetteFournisseur(DetteFournisseurDto.toEntity(dto.getDetteFournisseur()));
+        entity.setDette(DetteFournisseurDto.toEntity(dto.getDetteFournisseur()));
         entity.setFournisseur(FournisseurDto.toEntity(dto.getFournisseur()));
         return entity;
     }

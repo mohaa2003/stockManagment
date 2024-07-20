@@ -1,7 +1,9 @@
 package com.stockManagment.api.client;
 
+import com.stockManagment.api.dette.DetteClientDto;
 import com.stockManagment.api.entreprise.EntrepriseDto;
 import com.stockManagment.api.vente.VenteDto;
+import com.stockManagment.api.versement.VersementClientDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,8 +21,8 @@ public class ClientDto {
     private String numTlph;
     private String fonction;
     private List<VenteDto> venteList;
-    private List<VersementClientDTO> versementClientList;
-    private DetteClientDTO detteClient;
+    private List<VersementClientDto> versementClientList;
+    private DetteClientDto detteClient;
     private EntrepriseDto entreprise;
 
     public static ClientDto fromEntity(Client client) {
@@ -36,7 +38,7 @@ public class ClientDto {
                 client.getFonction(),
                 client.getVenteList().stream().map(VenteDto::fromEntity).collect(Collectors.toList()),
                 client.getVersementClientList().stream().map(VersementClientDto::fromEntity).collect(Collectors.toList()),
-                DetteClientDto.fromEntity(client.getDetteClient()),
+                (DetteClientDto) DetteClientDto.fromEntity(client.getDette()),
                 EntrepriseDto.fromEntity(client.getEntreprise())
         );
     }
@@ -54,7 +56,7 @@ public class ClientDto {
         client.setFonction(clientDto.getFonction());
         client.setVenteList(clientDto.getVenteList().stream().map(VenteDto::toEntity).collect(Collectors.toList()));
         client.setVersementClientList(clientDto.getVersementClientList().stream().map(VersementClientDto::toEntity).collect(Collectors.toList()));
-        client.setDetteClient(DetteClientDto.toEntity(clientDto.getDetteClient()));
+        client.setDette(DetteClientDto.toEntity(clientDto.getDetteClient()));
         client.setEntreprise(EntrepriseDto.toEntity(clientDto.getEntreprise()));
 
         return client;

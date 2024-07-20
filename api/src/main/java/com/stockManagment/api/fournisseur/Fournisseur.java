@@ -2,6 +2,7 @@ package com.stockManagment.api.fournisseur;
 
 import com.stockManagment.api.SuperEntity;
 import com.stockManagment.api.achat.Achat;
+import com.stockManagment.api.dette.Dette;
 import com.stockManagment.api.dette.DetteFournisseur;
 import com.stockManagment.api.entreprise.Entreprise;
 import com.stockManagment.api.vente.Vente;
@@ -34,7 +35,7 @@ public class Fournisseur  extends SuperEntity {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_dette")
-    private DetteFournisseur detteFournisseur;
+    private Dette dette;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_entreprise")

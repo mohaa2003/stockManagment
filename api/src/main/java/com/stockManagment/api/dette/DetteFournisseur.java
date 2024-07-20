@@ -5,6 +5,7 @@ import com.stockManagment.api.fournisseur.Fournisseur;
 import com.stockManagment.api.versement.VersementAutre;
 import com.stockManagment.api.versement.VersementFournisseur;
 import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 @DiscriminatorValue("FOURNISSEUR")
 public class DetteFournisseur extends Dette{
 

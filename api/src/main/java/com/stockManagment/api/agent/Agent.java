@@ -1,13 +1,11 @@
 package com.stockManagment.api.agent;
 
 import com.stockManagment.api.SuperEntity;
-import com.stockManagment.api.achat.Achat;
+import com.stockManagment.api.dette.Dette;
 import com.stockManagment.api.dette.DetteAutre;
 import com.stockManagment.api.entreprise.Entreprise;
 import com.stockManagment.api.transaction.Transaction;
-import com.stockManagment.api.vente.Vente;
 import com.stockManagment.api.versement.VersementAutre;
-import com.stockManagment.api.versement.VersementClient;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,10 +35,10 @@ public class Agent extends SuperEntity
     private List<VersementAutre> versementAutreList ;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "dette_id")
-    private DetteAutre detteAutre;
+    @JoinColumn(name = "id_dette")
+    private Dette dette;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_entreprise")
     private Entreprise entreprise;
 

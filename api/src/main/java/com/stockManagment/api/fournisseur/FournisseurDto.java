@@ -36,7 +36,7 @@ public class FournisseurDto {
                 fournisseur.getNumTlph(),
                 fournisseur.getAchatList().stream().map(AchatDto::fromEntity).collect(Collectors.toList()),
                 fournisseur.getVersementFournisseurList().stream().map(VersementFournisseurDto::fromEntity).collect(Collectors.toList()),
-                DetteFournisseurDto.fromEntity(fournisseur.getDetteFournisseur()),
+                (DetteFournisseurDto) DetteFournisseurDto.fromEntity(fournisseur.getDette()),
                 EntrepriseDto.fromEntity(fournisseur.getEntreprise())
         );
     }
@@ -53,7 +53,7 @@ public class FournisseurDto {
         fournisseur.setNumTlph(fournisseurDto.getNumTlph());
         fournisseur.setAchatList(fournisseurDto.getAchatList().stream().map(AchatDto::toEntity).collect(Collectors.toList()));
         fournisseur.setVersementFournisseurList(fournisseurDto.getVersementFournisseurList().stream().map(VersementFournisseurDto::toEntity).collect(Collectors.toList()));
-        fournisseur.setDetteFournisseur(DetteFournisseurDto.toEntity(fournisseurDto.getDetteFournisseur()));
+        fournisseur.setDette(DetteFournisseurDto.toEntity(fournisseurDto.getDetteFournisseur()));
         fournisseur.setEntreprise(EntrepriseDto.toEntity(fournisseurDto.getEntreprise()));
 
         return fournisseur;
