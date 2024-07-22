@@ -20,8 +20,10 @@ import java.util.List;
 @Table(name = "compte")
 public class Compte  extends SuperEntity {
     @Enumerated(EnumType.STRING)
+    @Column(name = "type_de_compte" ,nullable = false,unique = true)
+    private TypeCompte typeCompte;
     @Column(name = "nom_de_compte" ,nullable = false,unique = true)
-    private TypeCompte nomCompte;
+    private String nomCompte;
     @Column(name = "credit" ,nullable = false,unique = true)
     private Double credit;
 
