@@ -6,7 +6,15 @@
     content:'';
     position: absolute;
     top: 0;
+    left: 0;
     width: 100%;
     height: 4px;
     background: linear-gradient(to right,#f7ce91 20%,#dbbefa 20%,#dbbefa 40%,#896e61 40%,#896e61 60%,#dcbffe 60%,#dcbffe 80%,#ca9fab 80%);
 }
+
+td,th{
+    border: 3px solid white;
+    padding: 8px;
+}
+
+tr th:

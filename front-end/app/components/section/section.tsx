@@ -5,8 +5,15 @@ const Section : React.FC = () => {
     return(
             <section className="p-6 flex flex-col justify-between h-full bg-slate-100 rounded-lg">
                 <Nav/>
-                <div className="section-main h-4/5 w-full rounded-b-2xl bg-white mx-auto">
-                    
+                <div className="section-main h-4/5 w-full rounded-b-2xl bg-white mx-auto p-8">
+                    <table className="bg-slate-200 w-full rounded-xl">
+                        <tr>
+                            <th>qq</th>
+                            <th>qq</th>
+                            <th>qq</th>
+                            <th>qq</th>
+                        </tr>
+                    </table>
                 </div>
             </section>
     );

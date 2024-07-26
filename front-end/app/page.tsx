@@ -1,6 +1,5 @@
 import Aside from "./components/aside/aside";
 import Section from "./components/section/section";
-import { Montserrat } from 'next/font/google';
 
 
 export default function Home() {
