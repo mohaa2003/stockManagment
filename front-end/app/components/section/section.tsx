@@ -7,12 +7,22 @@ const Section : React.FC = () => {
                 <Nav/>
                 <div className="section-main h-4/5 w-full rounded-b-2xl bg-white mx-auto p-8">
                     <table className="bg-slate-200 w-full rounded-xl">
-                        <tr>
-                            <th>qq</th>
-                            <th>qq</th>
-                            <th>qq</th>
-                            <th>qq</th>
-                        </tr>
+                        <thead>
+                            <tr>
+                                <th>qq</th>
+                                <th>qq</th>
+                                <th>qq</th>
+                                <th>qq</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>qq</th>
+                                <th>qq</th>
+                                <th>qq</th>
+                                <th>qq</th>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
             </section>
