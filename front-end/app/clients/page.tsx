@@ -1,5 +1,5 @@
-import Aside from "@/app/components/aside/aside";
-import Section from "../components/section/section";
+import Aside from "@/app/sections/aside/aside";
+import Section from "../sections/section/section";
 
 const Clients : React.FC = () => {
     return(

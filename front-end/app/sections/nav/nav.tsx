@@ -6,11 +6,11 @@ import profilPic from "@/public/profil_pic.png";
 type navbar = {
     title : string;
 }
-const Nav : React.FC<navbar> = ({title}:navbar) => {
+const Nav : React.FC<navbar> = ({title}) => {
     return(
             <nav className="flex justify-between navbar mx-auto bg-white h-20 w-full rounded-2xl items-center px-8">
                 <div className="title">
-                    <h2 className="text-lg font-bold">Les Achats</h2>
+                    <h2 className="text-lg font-bold">{title}</h2>
                 </div>
                 <div className="personal-info">
                     <Link href={"/personal"}>
