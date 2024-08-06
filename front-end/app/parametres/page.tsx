@@ -5,7 +5,7 @@ const Parametres : React.FC = () => {
     return(
         <main className="h-screen grid rounded-lg">
             <Aside/>
-            <Section/>
+            <Section title={"Parametres"} tableHeaders={[]} tableContent={[]}/>
         </main>
     );
 }

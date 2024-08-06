@@ -7,13 +7,13 @@ export type tableProps = {
 }
 const Table : React.FC<tableProps> = ({tableHeaders,tableContent}) => {
     return(
-        <table className="main-table">
+        <table className="main-table bg-slate-100 w-full rounded-xl">
             <thead>
                 <tr>
                     {
                         tableHeaders.map((val : string, ind : number) : React.ReactNode=>
                             (
-                                <th key={ind}>
+                                <th className="bg-slate-800" key={ind}>
                                     {val}
                                 </th>
                             ))

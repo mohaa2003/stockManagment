@@ -5,7 +5,7 @@ const Clients : React.FC = () => {
     return(
         <main className="h-screen grid rounded-lg">
             <Aside/>
-            <Section/>
+            <Section title={"Mes Clients"} tableHeaders={[]} tableContent={[]}/>
         </main>
     );
 }

@@ -5,7 +5,7 @@ const Achats : React.FC = () => {
     return(
         <main className="h-screen grid rounded-lg">
             <Aside/>
-            <Section title={"Les Achats"} tableHeaders={["salam","elikoum","aa rais"]} tableContent={[]}/>
+            <Section title={"Mes Achats"} tableHeaders={["salam","elikoum","aa rais"]} tableContent={[]}/>
         </main>
     );
 }
