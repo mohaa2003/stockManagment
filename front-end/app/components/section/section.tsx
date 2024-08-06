@@ -6,21 +6,39 @@ const Section : React.FC = () => {
             <section className="p-6 flex flex-col justify-between h-full bg-slate-100 rounded-lg">
                 <Nav/>
                 <div className="section-main h-4/5 w-full rounded-b-2xl bg-white mx-auto p-8">
-                    <table className="bg-slate-200 w-full rounded-xl">
+                    <table className="main-table bg-slate-100 w-full rounded-xl">
                         <thead>
                             <tr>
-                                <th>qq</th>
-                                <th>qq</th>
-                                <th>qq</th>
-                                <th>qq</th>
+                                <th className="bg-slate-800">qq</th>
+                                <th className="bg-slate-800">qq</th>
+                                <th className="bg-slate-800">qq</th>
+                                <th className="bg-slate-800">qq</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <th>qq</th>
-                                <th>qq</th>
-                                <th>qq</th>
-                                <th>qq</th>
+                                <td>qq</td>
+                                <td>qq</td>
+                                <td>qq</td>
+                                <td>qq</td>
+                            </tr>
+                            <tr>
+                                <td>qq</td>
+                                <td>qq</td>
+                                <td>qq</td>
+                                <td>qq</td>
+                            </tr>
+                            <tr>
+                                <td>qq</td>
+                                <td>qq</td>
+                                <td>qq</td>
+                                <td>qq</td>
+                            </tr>
+                            <tr>
+                                <td>qq</td>
+                                <td>qq</td>
+                                <td>qq</td>
+                                <td>qq</td>
                             </tr>
                         </tbody>
                     </table>

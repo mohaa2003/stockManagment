@@ -19,3 +19,17 @@ section{
     grid-area: container;
 }
 
+.main-table td,th{
+    border: 0.4rem solid white;
+    padding: 8px;
+}
+
+.main-table tr th{
+    color: white;
+}
+
+
+.main-table td{
+    text-align: center;
+}
+
