@@ -1,4 +1,2 @@
-package com.stockManagment.api.vente;
-
-public class VenteRepo {
+package com.stockManagment.api.vente;public interface VenteRepo {
 }

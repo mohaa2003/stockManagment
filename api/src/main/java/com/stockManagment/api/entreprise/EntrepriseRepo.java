@@ -1,4 +1,2 @@
-package com.stockManagment.api.entreprise;
-
-public class EntrepriseRepo {
+package com.stockManagment.api.entreprise;public interface EntrepriseRepo {
 }

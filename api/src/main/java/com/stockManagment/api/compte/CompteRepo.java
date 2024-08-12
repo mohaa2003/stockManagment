@@ -1,4 +1,2 @@
-package com.stockManagment.api.compte;
-
-public class CompteRepo {
+package com.stockManagment.api.compte;public interface CompteRepo {
 }

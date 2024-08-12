@@ -1,4 +1,2 @@
-package com.stockManagment.api.produit;
-
-public class ProduitRepo {
+package com.stockManagment.api.produit;public interface ProduitRepo {
 }

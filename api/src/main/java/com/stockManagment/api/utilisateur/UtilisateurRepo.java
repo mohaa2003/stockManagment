@@ -1,4 +1,2 @@
-package com.stockManagment.api.utilisateur;
-
-public class UtilisateurRepo {
+package com.stockManagment.api.utilisateur;public interface UtilisateurRepo {
 }

@@ -1,4 +1,2 @@
-package com.stockManagment.api.ligneVente;
-
-public class LigneVenteRepo {
+package com.stockManagment.api.ligneVente;public interface LigneVenteRepo {
 }

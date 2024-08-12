@@ -1,4 +1,2 @@
-package com.stockManagment.api.achat;
-
-public class AchatRepo {
+package com.stockManagment.api.achat;public interface AchatRepo {
 }

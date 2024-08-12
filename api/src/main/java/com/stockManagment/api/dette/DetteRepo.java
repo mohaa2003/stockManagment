@@ -1,4 +1,2 @@
-package com.stockManagment.api.dette;
-
-public class DetteRepo {
+package com.stockManagment.api.dette;public interface DetteRepo {
 }

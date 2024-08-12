@@ -1,4 +1,2 @@
-package com.stockManagment.api.transaction;
-
-public class TransactionRepo {
+package com.stockManagment.api.transaction;public interface TransactionRepo {
 }

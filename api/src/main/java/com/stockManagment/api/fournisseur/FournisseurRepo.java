@@ -1,4 +1,2 @@
-package com.stockManagment.api.fournisseur;
-
-public class FournisseurRepo {
+package com.stockManagment.api.fournisseur;public interface FournisseurRepo {
 }

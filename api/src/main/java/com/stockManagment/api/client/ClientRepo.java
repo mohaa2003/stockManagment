@@ -1,4 +1,2 @@
-package com.stockManagment.api.client;
-
-public class ClientRepo {
+package com.stockManagment.api.client;public interface ClientRepo {
 }
