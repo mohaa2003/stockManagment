@@ -3,7 +3,6 @@ package com.stockManagment.api.fournisseur;
 import com.stockManagment.api.achat.AchatDto;
 import com.stockManagment.api.dette.DetteFournisseurDto;
 import com.stockManagment.api.entreprise.EntrepriseDto;
-import com.stockManagment.api.versement.VersementFournisseurDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +19,6 @@ public class FournisseurDto {
     private String surnomFournisseur;
     private String numTlph;
     private List<AchatDto> achatList;
-    private List<VersementFournisseurDto> versementFournisseurList;
     private DetteFournisseurDto detteFournisseur;
     private EntrepriseDto entreprise;
 
@@ -35,7 +33,6 @@ public class FournisseurDto {
                 fournisseur.getSurnomFournisseur(),
                 fournisseur.getNumTlph(),
                 fournisseur.getAchatList().stream().map(AchatDto::fromEntity).collect(Collectors.toList()),
-                fournisseur.getVersementFournisseurList().stream().map(VersementFournisseurDto::fromEntity).collect(Collectors.toList()),
                 (DetteFournisseurDto) DetteFournisseurDto.fromEntity(fournisseur.getDette()),
                 EntrepriseDto.fromEntity(fournisseur.getEntreprise())
         );
@@ -52,7 +49,6 @@ public class FournisseurDto {
         fournisseur.setSurnomFournisseur(fournisseurDto.getSurnomFournisseur());
         fournisseur.setNumTlph(fournisseurDto.getNumTlph());
         fournisseur.setAchatList(fournisseurDto.getAchatList().stream().map(AchatDto::toEntity).collect(Collectors.toList()));
-        fournisseur.setVersementFournisseurList(fournisseurDto.getVersementFournisseurList().stream().map(VersementFournisseurDto::toEntity).collect(Collectors.toList()));
         fournisseur.setDette(DetteFournisseurDto.toEntity(fournisseurDto.getDetteFournisseur()));
         fournisseur.setEntreprise(EntrepriseDto.toEntity(fournisseurDto.getEntreprise()));
 

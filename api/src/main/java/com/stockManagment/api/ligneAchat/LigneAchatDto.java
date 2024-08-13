@@ -44,4 +44,8 @@ public class LigneAchatDto {
 
         return ligneAchat;
     }
+
+    public Double calculPrixLigne(){
+        return Double.valueOf(this.quantite * this.prixAchat);
+    }
 }

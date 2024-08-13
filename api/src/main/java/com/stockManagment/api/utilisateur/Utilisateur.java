@@ -23,7 +23,7 @@ public class Utilisateur extends SuperEntity {
     private Roles role;
     //private static Integer nombreUtilisateur;  a mettre dans le dto pour ne pas entrer dans
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_entreprise",nullable = false)
     private Entreprise entreprise;
 }

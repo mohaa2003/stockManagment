@@ -1,14 +1,9 @@
 package com.stockManagment.api.achat;
 
-import com.stockManagment.api.agent.Agent;
 import com.stockManagment.api.compte.CompteDto;
-import com.stockManagment.api.compte.TypeCompte;
-import com.stockManagment.api.dette.DetteAutreDto;
 import com.stockManagment.api.entreprise.EntrepriseDto;
 import com.stockManagment.api.fournisseur.FournisseurDto;
 import com.stockManagment.api.ligneAchat.LigneAchatDto;
-import com.stockManagment.api.transaction.TransactionDto;
-import com.stockManagment.api.versement.VersementAutreDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,7 +18,7 @@ public class AchatDto {
     private Integer id;
     private Double prixAchatTotal;
     private Double somePaye;
-    private TypeCompte typeComptePayementInitial;
+    private Double prixApresRemise;
     private StatutLivraison statutLivraison;
     private StatutPayement statutPayement;
     private List<LigneAchatDto> ligneAchatList;
@@ -40,7 +35,7 @@ public class AchatDto {
                 achat.getId(),
                 achat.getPrixAchatTotal(),
                 achat.getSomePaye(),
-                achat.getTypeComptePayementInitial(),
+                achat.getPrixApresRemise(),
                 achat.getStatutLivraison(),
                 achat.getStatutPayement(),
                 achat.getLigneAchatList().stream().map(LigneAchatDto::fromEntity).collect(Collectors.toList()),
@@ -60,7 +55,7 @@ public class AchatDto {
                 achat.setId(achatDto.getId());
                 achat.setPrixAchatTotal(achatDto.getPrixAchatTotal());
                 achat.setSomePaye(achatDto.getSomePaye());
-                achat.setTypeComptePayementInitial(achatDto.getTypeComptePayementInitial());
+                achat.setPrixApresRemise(achatDto.getPrixApresRemise());
                 achat.setStatutLivraison(achatDto.getStatutLivraison());
                 achat.setStatutPayement(achatDto.getStatutPayement());
                 achat.setLigneAchatList(achatDto.getLigneAchatList().stream().map(LigneAchatDto::toEntity).collect(Collectors.toList()));
@@ -69,5 +64,14 @@ public class AchatDto {
                 achat.setEntreprise(EntrepriseDto.toEntity(achatDto.getEntreprise()));
 
                 return achat;
+    }
+
+    public Double calculPrixAchat(){
+        return( this.ligneAchatList.stream().map(LigneAchatDto::calculPrixLigne).reduce(0.0,Double::sum) );
+    }
+
+    public Double faireRemise(Double remise){
+        this.prixApresRemise = this.prixAchatTotal - remise;
+        return remise;
     }
 }

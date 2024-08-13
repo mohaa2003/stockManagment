@@ -1,6 +1,8 @@
 package com.stockManagment.api.versement;
 
 import com.stockManagment.api.compte.CompteDto;
+import com.stockManagment.api.dette.Dette;
+import com.stockManagment.api.dette.DetteDto;
 import com.stockManagment.api.dette.DetteType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,6 +16,7 @@ public class VersementDto {
     private DetteType typeDette;
     private Double some;
     private CompteDto compte;
+    private DetteDto dette;
 
     public static VersementDto fromEntity(Versement versement) {
         if (versement == null) {
@@ -22,9 +25,10 @@ public class VersementDto {
 
         return new VersementDto(
                 versement.getId(),
-                versement.getTypeDette(),
+                versement.getTypeVersement(),
                 versement.getSome(),
-                CompteDto.fromEntity(versement.getCompte())
+                CompteDto.fromEntity(versement.getCompte()),
+                DetteDto.fromEntity(versement.getDette())
         );
     }
 
@@ -35,9 +39,10 @@ public class VersementDto {
 
         Versement versement = new Versement();
         versement.setId(versementDto.getId());
-        versement.setTypeDette(versementDto.getTypeDette());
+        versement.setTypeVersement(versementDto.getTypeDette());
         versement.setSome(versementDto.getSome());
         versement.setCompte(CompteDto.toEntity(versementDto.getCompte()));
+        versement.setDette(DetteDto.toEntity(versementDto.getDette()));
 
         return versement;
     }

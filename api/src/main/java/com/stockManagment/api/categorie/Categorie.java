@@ -1,5 +1,6 @@
 package com.stockManagment.api.categorie;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.stockManagment.api.SuperEntity;
 import com.stockManagment.api.fournisseur.Fournisseur;
 import com.stockManagment.api.ligneAchat.LigneAchat;
@@ -21,9 +22,11 @@ public class Categorie extends SuperEntity {
     private String nomCategorie;
 
     @OneToMany(mappedBy = "categorie")
+    @JsonIgnore
     private List<Produit> produitList ;
 
     @OneToMany(mappedBy = "categorie")
+    @JsonIgnore
     private List<Categorie> categorieList ;   //pour les categories imbriquees
 
     @ManyToOne

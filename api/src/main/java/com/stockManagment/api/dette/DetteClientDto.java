@@ -2,8 +2,7 @@ package com.stockManagment.api.dette;
 
 import com.stockManagment.api.client.ClientDto;
 import com.stockManagment.api.entreprise.EntrepriseDto;
-import com.stockManagment.api.versement.VersementClientDto;
-import lombok.AllArgsConstructor;
+import com.stockManagment.api.versement.VersementDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,12 +12,12 @@ import java.util.stream.Collectors;
 @Data
 @NoArgsConstructor
 public class DetteClientDto extends DetteDto {
-    private List<VersementClientDto> versementClientList;
+    private List<VersementDto> versementList;
     private ClientDto client;
 
-    public DetteClientDto(Integer id, DetteType typeDette, Double some, EntrepriseDto entreprise, List<VersementClientDto> versementClientList, ClientDto client) {
+    public DetteClientDto(Integer id, DetteType typeDette, Double some, EntrepriseDto entreprise, List<VersementDto> versementClientList, ClientDto client) {
         super(id, typeDette, some, entreprise);
-        this.versementClientList = versementClientList;
+        this.versementList = versementClientList;
         this.client = client;
     }
 
@@ -31,7 +30,7 @@ public class DetteClientDto extends DetteDto {
                 entity.getTypeDette(),
                 entity.getSome(),
                 EntrepriseDto.fromEntity(entity.getEntreprise()),
-                entity.getVersementClientList().stream().map(VersementClientDto::fromEntity).collect(Collectors.toList()),
+                entity.getVersementClientList().stream().map(VersementDto::fromEntity).collect(Collectors.toList()),
                 ClientDto.fromEntity(entity.getClient())
         );
     }
@@ -45,7 +44,7 @@ public class DetteClientDto extends DetteDto {
         entity.setTypeDette(dto.getTypeDette());
         entity.setSome(dto.getSome());
         entity.setEntreprise(EntrepriseDto.toEntity(dto.getEntreprise()));
-        entity.setVersementClientList(dto.getVersementClientList().stream().map(VersementClientDto::toEntity).collect(Collectors.toList()));
+        entity.setVersementClientList(dto.getVersementList().stream().map(VersementDto::toEntity).collect(Collectors.toList()));
         entity.setClient(ClientDto.toEntity(dto.getClient()));
         return entity;
     }

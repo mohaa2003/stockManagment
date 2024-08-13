@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "ligne_de_vente" )
+@Table(name = "ligne_dachat" )
 public class LigneAchat  extends SuperEntity {
     private Integer quantite = 1;
     @Column(name = "prix_achat" ,nullable = false)
@@ -27,5 +27,4 @@ public class LigneAchat  extends SuperEntity {
     @JoinColumn(name = "id_produit",nullable = false)
     private Produit produit;
 
-//    calculPrixLigneAchat
 }

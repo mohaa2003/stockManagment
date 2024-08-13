@@ -1,5 +1,6 @@
 package com.stockManagment.api.vente;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.stockManagment.api.SuperEntity;
 import com.stockManagment.api.achat.Achat;
 import com.stockManagment.api.client.Client;
@@ -21,12 +22,13 @@ import java.util.List;
 @Table(name = "vente" )
 public class Vente  extends SuperEntity {
     @Column(name = "prix_de_vente", nullable = false)
-    private Double prixTotaleVente;
+    private Double prixTotaleVente = this.getPrixTotaleVente();
+    @Column(name = "prix_remise_vente", nullable = false)
+    private Double prixApresRemise = this.getPrixTotaleVente();
     @Enumerated(EnumType.STRING)
-    @Column(name = "type_payement_initial", nullable = false)
-    private TypeCompte typeComptePayementInitial;
 
     @OneToMany(mappedBy = "vente",cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<LigneVente> ligneVenteList ;
 
     @ManyToOne
@@ -37,8 +39,8 @@ public class Vente  extends SuperEntity {
     @JoinColumn(name = "id_compte",nullable = false)
     private Compte compte;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_entreprise")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_entreprise",nullable = false)
     private Entreprise entreprise;
 
 //    Double calculPrixFacture(){

@@ -1,12 +1,11 @@
 package com.stockManagment.api.fournisseur;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.stockManagment.api.SuperEntity;
 import com.stockManagment.api.achat.Achat;
 import com.stockManagment.api.dette.Dette;
-import com.stockManagment.api.dette.DetteFournisseur;
 import com.stockManagment.api.entreprise.Entreprise;
-import com.stockManagment.api.vente.Vente;
-import com.stockManagment.api.versement.VersementFournisseur;
+import com.stockManagment.api.versement.Versement;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,16 +27,15 @@ public class Fournisseur  extends SuperEntity {
     private String numTlph;
 
     @OneToMany(mappedBy = "fournisseur")
+    @JsonIgnore
     private List<Achat> achatList ;
 
-    @OneToMany(mappedBy = "fournisseur")
-    private List<VersementFournisseur> versementFournisseurList ;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_dette")
     private Dette dette;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_entreprise")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_entreprise",nullable = false)
     private Entreprise entreprise;
 }

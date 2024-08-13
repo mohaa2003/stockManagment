@@ -1,11 +1,10 @@
 package com.stockManagment.api.agent;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.stockManagment.api.SuperEntity;
 import com.stockManagment.api.dette.Dette;
-import com.stockManagment.api.dette.DetteAutre;
 import com.stockManagment.api.entreprise.Entreprise;
 import com.stockManagment.api.transaction.Transaction;
-import com.stockManagment.api.versement.VersementAutre;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,17 +28,16 @@ public class Agent extends SuperEntity
     private String fonction;
 
     @OneToMany(mappedBy = "agent")
+    @JsonIgnore
     private List<Transaction> transactionList ;
 
-    @OneToMany(mappedBy = "agent")
-    private List<VersementAutre> versementAutreList ;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_dette")
     private Dette dette;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_entreprise")
+    @JoinColumn(name = "id_entreprise",nullable = false)
     private Entreprise entreprise;
 
 //    date de 1er achat ... et de dernier achat

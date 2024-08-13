@@ -2,8 +2,8 @@ package com.stockManagment.api.dette;
 
 import com.stockManagment.api.agent.AgentDto;
 import com.stockManagment.api.entreprise.EntrepriseDto;
-import com.stockManagment.api.versement.VersementAutreDto;
-import lombok.AllArgsConstructor;
+import com.stockManagment.api.versement.Versement;
+import com.stockManagment.api.versement.VersementDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,12 +13,12 @@ import java.util.stream.Collectors;
 @Data
 @NoArgsConstructor
 public class DetteAutreDto extends DetteDto {
-    private List<VersementAutreDto> versementAutreListList;
+    private List<VersementDto> versementList;
     private AgentDto agent;
 
-    public DetteAutreDto(Integer id, DetteType typeDette, Double some, EntrepriseDto entreprise, List<VersementAutreDto> versementAutreListList, AgentDto agent) {
+    public DetteAutreDto(Integer id, DetteType typeDette, Double some, EntrepriseDto entreprise, List<VersementDto> versementList, AgentDto agent) {
         super(id, typeDette, some, entreprise);
-        this.versementAutreListList = versementAutreListList;
+        this.versementList = versementList;
         this.agent = agent;
     }
 
@@ -31,7 +31,7 @@ public class DetteAutreDto extends DetteDto {
                 entity.getTypeDette(),
                 entity.getSome(),
                 EntrepriseDto.fromEntity(entity.getEntreprise()),
-                entity.getVersementAutreList().stream().map(VersementAutreDto::fromEntity).collect(Collectors.toList()),
+                entity.getVersementList().stream().map(VersementDto::fromEntity).collect(Collectors.toList()),
                 AgentDto.fromEntity(entity.getAgent())
         );
     }
@@ -45,7 +45,7 @@ public class DetteAutreDto extends DetteDto {
         entity.setTypeDette(dto.getTypeDette());
         entity.setSome(dto.getSome());
         entity.setEntreprise(EntrepriseDto.toEntity(dto.getEntreprise()));
-        entity.setVersementAutreList(dto.getVersementAutreListList().stream().map(VersementAutreDto::toEntity).collect(Collectors.toList()));
+        entity.setVersementList(dto.getVersementList().stream().map(VersementDto::toEntity).collect(Collectors.toList()));
         entity.setAgent(AgentDto.toEntity(dto.getAgent()));
         return entity;
     }

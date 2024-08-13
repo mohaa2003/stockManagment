@@ -1,5 +1,6 @@
 package com.stockManagment.api.produit;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.stockManagment.api.SuperEntity;
 import com.stockManagment.api.achat.Achat;
 import com.stockManagment.api.categorie.Categorie;
@@ -30,16 +31,18 @@ public class Produit  extends SuperEntity {
     private Integer quantiteDisponible = 0;
 
     @OneToMany(mappedBy = "produit")
+    @JsonIgnore
     private List<LigneAchat> ligneAchatList ;
 
     @OneToMany(mappedBy = "produit")
+    @JsonIgnore
     private List<LigneVente> ligneVenteList ;
 
     @ManyToOne
     @JoinColumn(name = "id_categorie",nullable = false)
     private Categorie categorie;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_entreprise")
     private Entreprise entreprise;
 }

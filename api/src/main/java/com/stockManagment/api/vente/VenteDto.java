@@ -2,7 +2,6 @@ package com.stockManagment.api.vente;
 
 import com.stockManagment.api.client.ClientDto;
 import com.stockManagment.api.compte.CompteDto;
-import com.stockManagment.api.compte.TypeCompte;
 import com.stockManagment.api.entreprise.EntrepriseDto;
 import com.stockManagment.api.ligneVente.LigneVenteDto;
 import lombok.AllArgsConstructor;
@@ -18,7 +17,7 @@ import java.util.stream.Collectors;
 public class VenteDto {
     private Integer id;
     private Double prixTotaleVente;
-    private TypeCompte typeComptePayementInitial;
+    private Double prixApresRemise;
     private List<LigneVenteDto> ligneVenteList;
     private ClientDto client;
     private CompteDto compte;
@@ -32,7 +31,7 @@ public class VenteDto {
         return new VenteDto(
                 vente.getId(),
                 vente.getPrixTotaleVente(),
-                vente.getTypeComptePayementInitial(),
+                vente.getPrixApresRemise(),
                 vente.getLigneVenteList().stream().map(LigneVenteDto::fromEntity).collect(Collectors.toList()),
                 ClientDto.fromEntity(vente.getClient()),
                 CompteDto.fromEntity(vente.getCompte()),
@@ -48,12 +47,21 @@ public class VenteDto {
         Vente vente = new Vente();
         vente.setId(venteDto.getId());
         vente.setPrixTotaleVente(venteDto.getPrixTotaleVente());
-        vente.setTypeComptePayementInitial(venteDto.getTypeComptePayementInitial());
+        vente.setPrixApresRemise(venteDto.getPrixApresRemise());
         vente.setLigneVenteList(venteDto.getLigneVenteList().stream().map(LigneVenteDto::toEntity).collect(Collectors.toList()));
         vente.setClient(ClientDto.toEntity(venteDto.getClient()));
         vente.setCompte(CompteDto.toEntity(venteDto.getCompte()));
         vente.setEntreprise(EntrepriseDto.toEntity(venteDto.getEntreprise()));
 
         return vente;
+    }
+
+    public Double calculPrixVente(){
+        return( this.ligneVenteList.stream().map(LigneVenteDto::calculPrixLigne).reduce(0.0,Double::sum) );
+    }
+
+    public Double faireRemise(Double remise){
+        this.prixApresRemise = this.prixTotaleVente - remise;
+        return remise;
     }
 }

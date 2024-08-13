@@ -1,12 +1,10 @@
 package com.stockManagment.api.client;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.stockManagment.api.SuperEntity;
 import com.stockManagment.api.dette.Dette;
-import com.stockManagment.api.dette.DetteClient;
 import com.stockManagment.api.entreprise.Entreprise;
-import com.stockManagment.api.produit.Produit;
 import com.stockManagment.api.vente.Vente;
-import com.stockManagment.api.versement.VersementClient;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,17 +28,16 @@ public class Client  extends SuperEntity {
     private String fonction;
 
     @OneToMany(mappedBy = "client")
+    @JsonIgnore
     private List<Vente> venteList ;
 
-    @OneToMany(mappedBy = "client")
-    private List<VersementClient> versementClientList ;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_dette")
     private Dette dette;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_entreprise")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_entreprise",nullable = false)
     private Entreprise entreprise;
 
 //    date de 1er achat ... et de dernier achat

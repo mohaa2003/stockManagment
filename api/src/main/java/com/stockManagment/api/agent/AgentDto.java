@@ -3,7 +3,6 @@ package com.stockManagment.api.agent;
 import com.stockManagment.api.dette.DetteAutreDto;
 import com.stockManagment.api.entreprise.EntrepriseDto;
 import com.stockManagment.api.transaction.TransactionDto;
-import com.stockManagment.api.versement.VersementAutreDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +20,6 @@ public class AgentDto {
     private String numTlph;
     private String fonction;
     private List<TransactionDto> transactionList;
-    private List<VersementAutreDto> versementAutreList;
     private DetteAutreDto detteAutre;
     private EntrepriseDto entreprise;
 
@@ -37,7 +35,6 @@ public class AgentDto {
                 agent.getNumTlph(),
                 agent.getFonction(),
                 agent.getTransactionList().stream().map(TransactionDto::fromEntity).collect(Collectors.toList()),
-                agent.getVersementAutreList().stream().map(VersementAutreDto::fromEntity).collect(Collectors.toList()),
                 (DetteAutreDto) DetteAutreDto.fromEntity(agent.getDette()),
                 EntrepriseDto.fromEntity(agent.getEntreprise())
         );
@@ -55,7 +52,6 @@ public class AgentDto {
         agent.setNumTlph(agentDto.getNumTlph());
         agent.setFonction(agentDto.getFonction());
         agent.setTransactionList(agentDto.getTransactionList().stream().map(TransactionDto::toEntity).collect(Collectors.toList()));
-        agent.setVersementAutreList(agentDto.getVersementAutreList().stream().map(VersementAutreDto::toEntity).collect(Collectors.toList()));
         agent.setDette(DetteAutreDto.toEntity(agentDto.getDetteAutre()));
         agent.setEntreprise(EntrepriseDto.toEntity(agentDto.getEntreprise()));
 

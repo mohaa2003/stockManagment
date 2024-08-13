@@ -21,7 +21,7 @@ public class Dette  extends SuperEntity {
     @Column(name = "some" ,nullable = false)
     private double some;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_entreprise")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_entreprise",nullable = false)
     private Entreprise entreprise;
 }

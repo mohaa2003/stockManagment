@@ -1,12 +1,9 @@
 package com.stockManagment.api.transaction;
 
 import com.stockManagment.api.SuperEntity;
-import com.stockManagment.api.achat.Achat;
 import com.stockManagment.api.agent.Agent;
 import com.stockManagment.api.compte.Compte;
 import com.stockManagment.api.entreprise.Entreprise;
-import com.stockManagment.api.fournisseur.Fournisseur;
-import com.stockManagment.api.versement.VersementAutre;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,7 +35,7 @@ public class Transaction  extends SuperEntity {
     @JoinColumn(name = "id_compte",nullable = false)
     private Compte compte;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_entreprise")
     private Entreprise entreprise;
 }

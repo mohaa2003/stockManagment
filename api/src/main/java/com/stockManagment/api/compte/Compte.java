@@ -1,5 +1,6 @@
 package com.stockManagment.api.compte;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.stockManagment.api.SuperEntity;
 import com.stockManagment.api.achat.Achat;
 import com.stockManagment.api.entreprise.Entreprise;
@@ -20,29 +21,31 @@ import java.util.List;
 @Table(name = "compte")
 public class Compte  extends SuperEntity {
     @Enumerated(EnumType.STRING)
-    @Column(name = "type_de_compte" ,nullable = false,unique = true)
-    private TypeCompte typeCompte;
     @Column(name = "nom_de_compte" ,nullable = false,unique = true)
-    private String nomCompte;
+    private TypeCompte nomCompte;
     @Column(name = "credit" ,nullable = false,unique = true)
     private Double credit;
 
     //datteCreation et modification
 
     @OneToMany(mappedBy = "compte")
+    @JsonIgnore
     private List<Versement> versementList;
 
     @OneToMany(mappedBy = "compte")
+    @JsonIgnore
     private List<Vente> venteList;
 
     @OneToMany(mappedBy = "compte")
+    @JsonIgnore
     private List<Achat> achatList;
 
     @OneToMany(mappedBy = "compte")
+    @JsonIgnore
     private List<Transaction> transaction;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_entreprise")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_entreprise",nullable = false)
     private Entreprise entreprise;
 
 
