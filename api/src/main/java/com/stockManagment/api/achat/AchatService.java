@@ -13,6 +13,7 @@ import com.stockManagment.api.fournisseur.Fournisseur;
 import com.stockManagment.api.fournisseur.FournisseurDto;
 import com.stockManagment.api.fournisseur.FournisseurRepo;
 import com.stockManagment.api.ligneAchat.LigneAchatDto;
+import com.stockManagment.api.ligneAchat.LigneAchatRepo;
 import com.stockManagment.api.produit.Produit;
 import com.stockManagment.api.produit.ProduitDto;
 import com.stockManagment.api.produit.ProduitRepo;
@@ -32,6 +33,7 @@ public class AchatService {
     private final FournisseurRepo fournisseurRepo;
     private final DetteRepo detteRepo;
     private final ProduitRepo produitRepo;
+    private final LigneAchatRepo ligneAchatRepo;
 
     public Integer save(AchatDto achat) {
 
@@ -43,11 +45,10 @@ public class AchatService {
             Produit produit = produitRepo.findById(ligneAchatDto.getProduit().getId()).orElseThrow(()->new EntityNotFoundException(ErrorCodes.PRODUIT_NOT_FOUND.getDescription()+" with id = "+ligneAchatDto.getProduit().getId(),ErrorCodes.PRODUIT_NOT_FOUND));
             ProduitDto produitDto = ligneAchatDto.getProduit();
             Integer produitQtt = produitDto.getQuantiteDisponible();
-            if(ligneAchatDto.getQuantite() > produitQtt){
-                throw new OutOfException(ErrorCodes.OUT_OF_STOCK.getDescription()+" you have only "+produitQtt,ErrorCodes.OUT_OF_STOCK,produitQtt);
-            }
-            produitDto.setQuantiteDisponible(produitQtt - ligneAchatDto.getQuantite());
+            produitDto.setQuantiteDisponible(produitQtt + ligneAchatDto.getQuantite());
             produitRepo.save(ProduitDto.toEntity(produitDto));
+
+            ligneAchatRepo.save(LigneAchatDto.toEntity(ligneAchatDto));
         });
 
         //traitement de compte
@@ -74,7 +75,7 @@ public class AchatService {
 
             DetteDto detteObject = fournisseurDto.getDetteFournisseur();
 
-            detteObject.setSome(detteObject.getSome() + dette);
+            detteObject.setSome(detteObject.getSome() - dette);
             detteRepo.save(DetteDto.toEntity(detteObject));
         }
 

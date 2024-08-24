@@ -1,5 +1,7 @@
 package com.stockManagment.api.vente;
 
+import com.stockManagment.api.achat.StatutLivraison;
+import com.stockManagment.api.achat.StatutPayement;
 import com.stockManagment.api.client.ClientDto;
 import com.stockManagment.api.compte.CompteDto;
 import com.stockManagment.api.entreprise.EntrepriseDto;
@@ -18,6 +20,9 @@ public class VenteDto {
     private Integer id;
     private Double prixTotaleVente;
     private Double prixApresRemise;
+    private Double somePaye;
+    private StatutLivraison statutLivraison;
+    private StatutPayement statutPayement;
     private List<LigneVenteDto> ligneVenteList;
     private ClientDto client;
     private CompteDto compte;
@@ -33,8 +38,8 @@ public class VenteDto {
                 vente.getPrixTotaleVente(),
                 vente.getPrixApresRemise(),
                 vente.getSomePaye(),
-                vente.getStatutPayement(),
                 vente.getStatutLivraison(),
+                vente.getStatutPayement(),
                 vente.getLigneVenteList().stream().map(LigneVenteDto::fromEntity).collect(Collectors.toList()),
                 ClientDto.fromEntity(vente.getClient()),
                 CompteDto.fromEntity(vente.getCompte()),
@@ -51,6 +56,9 @@ public class VenteDto {
         vente.setId(venteDto.getId());
         vente.setPrixTotaleVente(venteDto.getPrixTotaleVente());
         vente.setPrixApresRemise(venteDto.getPrixApresRemise());
+        vente.setSomePaye(venteDto.getSomePaye());
+        vente.setStatutPayement(venteDto.getStatutPayement());
+        vente.setStatutLivraison(venteDto.getStatutLivraison());
         vente.setLigneVenteList(venteDto.getLigneVenteList().stream().map(LigneVenteDto::toEntity).collect(Collectors.toList()));
         vente.setClient(ClientDto.toEntity(venteDto.getClient()));
         vente.setCompte(CompteDto.toEntity(venteDto.getCompte()));
