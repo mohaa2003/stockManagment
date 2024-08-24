@@ -15,8 +15,8 @@ public class DetteClientDto extends DetteDto {
     private List<VersementDto> versementList;
     private ClientDto client;
 
-    public DetteClientDto(Integer id, DetteType typeDette, Double some, EntrepriseDto entreprise, List<VersementDto> versementClientList, ClientDto client) {
-        super(id, typeDette, some, entreprise);
+    public DetteClientDto(Integer id, Double some, EntrepriseDto entreprise, List<VersementDto> versementClientList, ClientDto client) {
+        super(id, some, entreprise);
         this.versementList = versementClientList;
         this.client = client;
     }
@@ -27,10 +27,9 @@ public class DetteClientDto extends DetteDto {
         }
         return new DetteClientDto(
                 entity.getId(),
-                entity.getTypeDette(),
                 entity.getSome(),
                 EntrepriseDto.fromEntity(entity.getEntreprise()),
-                entity.getVersementClientList().stream().map(VersementDto::fromEntity).collect(Collectors.toList()),
+                entity.getVersementList().stream().map(VersementDto::fromEntity).collect(Collectors.toList()),
                 ClientDto.fromEntity(entity.getClient())
         );
     }
@@ -41,10 +40,9 @@ public class DetteClientDto extends DetteDto {
         }
         DetteClient entity = new DetteClient();
         entity.setId(dto.getId());
-        entity.setTypeDette(dto.getTypeDette());
         entity.setSome(dto.getSome());
         entity.setEntreprise(EntrepriseDto.toEntity(dto.getEntreprise()));
-        entity.setVersementClientList(dto.getVersementList().stream().map(VersementDto::toEntity).collect(Collectors.toList()));
+        entity.setVersementList(dto.getVersementList().stream().map(VersementDto::toEntity).collect(Collectors.toList()));
         entity.setClient(ClientDto.toEntity(dto.getClient()));
         return entity;
     }

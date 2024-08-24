@@ -2,7 +2,6 @@ package com.stockManagment.api.dette;
 
 import com.stockManagment.api.agent.AgentDto;
 import com.stockManagment.api.entreprise.EntrepriseDto;
-import com.stockManagment.api.versement.Versement;
 import com.stockManagment.api.versement.VersementDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,8 +15,8 @@ public class DetteAutreDto extends DetteDto {
     private List<VersementDto> versementList;
     private AgentDto agent;
 
-    public DetteAutreDto(Integer id, DetteType typeDette, Double some, EntrepriseDto entreprise, List<VersementDto> versementList, AgentDto agent) {
-        super(id, typeDette, some, entreprise);
+    public DetteAutreDto(Integer id,  Double some, EntrepriseDto entreprise, List<VersementDto> versementList, AgentDto agent) {
+        super(id, some, entreprise);
         this.versementList = versementList;
         this.agent = agent;
     }
@@ -28,7 +27,6 @@ public class DetteAutreDto extends DetteDto {
         }
         return new DetteAutreDto(
                 entity.getId(),
-                entity.getTypeDette(),
                 entity.getSome(),
                 EntrepriseDto.fromEntity(entity.getEntreprise()),
                 entity.getVersementList().stream().map(VersementDto::fromEntity).collect(Collectors.toList()),
@@ -42,7 +40,6 @@ public class DetteAutreDto extends DetteDto {
         }
         DetteAutre entity = new DetteAutre();
         entity.setId(dto.getId());
-        entity.setTypeDette(dto.getTypeDette());
         entity.setSome(dto.getSome());
         entity.setEntreprise(EntrepriseDto.toEntity(dto.getEntreprise()));
         entity.setVersementList(dto.getVersementList().stream().map(VersementDto::toEntity).collect(Collectors.toList()));

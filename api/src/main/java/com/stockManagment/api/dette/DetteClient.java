@@ -21,7 +21,6 @@ import java.util.List;
 public class DetteClient extends Dette{
 
     @OneToMany(mappedBy = "dette")
-    private List<Versement> versementClientList;
 
     @OneToOne(mappedBy = "dette")
     private Client client;

@@ -17,8 +17,8 @@ public class DetteFournisseurDto extends DetteDto {
     private List<VersementDto> versementFournisseurList;
     private FournisseurDto fournisseur;
 
-    public DetteFournisseurDto(Integer id, DetteType typeDette, Double some, EntrepriseDto entreprise, List<VersementDto> versementFournisseurList, FournisseurDto fournisseur) {
-        super(id, typeDette, some, entreprise);
+    public DetteFournisseurDto(Integer id, Double some, EntrepriseDto entreprise, List<VersementDto> versementFournisseurList, FournisseurDto fournisseur) {
+        super(id, some, entreprise);
         this.versementFournisseurList = versementFournisseurList;
         this.fournisseur = fournisseur;
     }
@@ -29,7 +29,6 @@ public class DetteFournisseurDto extends DetteDto {
         }
         return new DetteFournisseurDto(
                 entity.getId(),
-                entity.getTypeDette(),
                 entity.getSome(),
                 EntrepriseDto.fromEntity(entity.getEntreprise()),
                 entity.getVersementList().stream().map(VersementDto::fromEntity).collect(Collectors.toList()),
@@ -43,7 +42,6 @@ public class DetteFournisseurDto extends DetteDto {
         }
         DetteFournisseur entity = new DetteFournisseur();
         entity.setId(dto.getId());
-        entity.setTypeDette(dto.getTypeDette());
         entity.setSome(dto.getSome());
         entity.setEntreprise(EntrepriseDto.toEntity(dto.getEntreprise()));
         entity.setVersementList(dto.getVersementFournisseurList().stream().map(VersementDto::toEntity).collect(Collectors.toList()));

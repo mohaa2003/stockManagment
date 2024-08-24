@@ -18,9 +18,6 @@ import java.util.List;
 @DiscriminatorValue("AUTRE")
 public class DetteAutre extends Dette{
 
-    @OneToMany(mappedBy = "dette")
-    private List<Versement> versementList;
-
     @OneToOne(mappedBy = "dette")
     private Agent agent;
 }

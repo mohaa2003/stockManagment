@@ -4,6 +4,7 @@ import com.stockManagment.api.compte.CompteDto;
 import com.stockManagment.api.entreprise.EntrepriseDto;
 import com.stockManagment.api.fournisseur.FournisseurDto;
 import com.stockManagment.api.ligneAchat.LigneAchatDto;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -70,7 +71,7 @@ public class AchatDto {
         return( this.ligneAchatList.stream().map(LigneAchatDto::calculPrixLigne).reduce(0.0,Double::sum) );
     }
 
-    public Double faireRemise(Double remise){
+    public Double faireRemise(@Positive Double remise){
         this.prixApresRemise = this.prixAchatTotal - remise;
         return remise;
     }

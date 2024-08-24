@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DetteDto {
     private Integer id;
-    private DetteType typeDette;
     private double some;
     private EntrepriseDto entreprise;
 
@@ -21,7 +20,6 @@ public class DetteDto {
 
         return new DetteDto(
                 dette.getId(),
-                dette.getTypeDette(),
                 dette.getSome(),
                 EntrepriseDto.fromEntity(dette.getEntreprise())
         );
@@ -34,7 +32,6 @@ public class DetteDto {
 
         Dette dette = new Dette();
         dette.setId(detteDTO.getId());
-        dette.setTypeDette(detteDTO.getTypeDette());
         dette.setSome(detteDTO.getSome());
         dette.setEntreprise(EntrepriseDto.toEntity(detteDTO.getEntreprise()));
 
