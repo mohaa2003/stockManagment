@@ -20,6 +20,7 @@ import com.stockManagment.api.produit.ProduitRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 @Slf4j
@@ -34,6 +35,7 @@ public class VenteService {
     private final DetteRepo detteRepo;
     private final ProduitRepo produitRepo;
 
+    @Transactional
     public Integer save(VenteDto vente) {
 
         //verification de la suffisance de stock !
@@ -62,6 +64,9 @@ public class VenteService {
         compteRepo.save(CompteDto.toEntity(currentCompte));
 
         //traitement de client et des dettes
+        if(vente.getPrixTotaleVente() < vente.getPrixApresRemise()){
+            throw new IllegalArgumentException("prixAchatTotal should be greater than prixApresRemise");
+        }
         Double dette = vente.getPrixApresRemise() - vente.getSomePaye();
         if(dette != 0.0){
             Client client = clientRepo.findById(vente.getClient().getId())

@@ -20,6 +20,7 @@ import com.stockManagment.api.produit.ProduitRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class AchatService {
     private final ProduitRepo produitRepo;
     private final LigneAchatRepo ligneAchatRepo;
 
+    @Transactional
     public Integer save(AchatDto achat) {
 
         //verification de la suffisance de stock !
@@ -63,6 +65,11 @@ public class AchatService {
         compteRepo.save(CompteDto.toEntity(currentCompte));
 
         //traitement de fournisseur et des dettes
+        if(achat.getPrixAchatTotal() < achat.getPrixApresRemise()){
+            throw new IllegalArgumentException("prixAchatTotal should be greater than prixApresRemise");
+        }
+        //typically i should make a verification if prix is less than the prix paye but i think about if he pays more than the buying price and mkach sarf !
+
         Double dette = achat.getPrixApresRemise() - achat.getSomePaye();
         if(dette != 0.0){
             Fournisseur fournisseur = fournisseurRepo.findById(achat.getFournisseur().getId())
