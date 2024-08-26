@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -26,5 +29,16 @@ public class CompteService {
         Compte compte = compteRepo.findById(id)
                 .orElseThrow(()->new EntityNotFoundException(ErrorCodes.COMPTE_NOT_FOUND.getDescription()+" with id = "+id,ErrorCodes.COMPTE_NOT_FOUND));
         return CompteDto.fromEntity(compte);
+    }
+
+    public List<CompteDto> findAll(){
+        return compteRepo.findAll().stream().map(CompteDto::fromEntity).collect(Collectors.toList());
+    }
+
+    public void delete(Integer id) {
+        if (id == null){
+            log.error("Compte non valid !");
+        }
+        compteRepo.deleteById(id);
     }
 }

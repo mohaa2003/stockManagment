@@ -18,4 +18,8 @@ public class AchatController {
     public ResponseEntity<Integer> save(@RequestBody @Valid AchatDto achat){
         return ResponseEntity.ok(achatService.save(achat));
     }
+
+    public ResponseEntity<AchatDto> findById(Integer id){
+        return ResponseEntity.ok(achatService.findById(id));
+    }
 }

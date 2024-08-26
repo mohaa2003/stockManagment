@@ -3,10 +3,10 @@ package com.stockManagment.api.compte;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -20,7 +20,18 @@ public class CompteController {
     }
 
     @GetMapping
-    public ResponseEntity<CompteDto> findById(Integer id){
+    public ResponseEntity<CompteDto> findById(@PathVariable Integer id){
         return ResponseEntity.ok(compteService.findById(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CompteDto>> findAll(){
+        return ResponseEntity.ok(compteService.findAll());
+    }
+
+    @DeleteMapping
+    public ResponseEntity delete(@PathVariable Integer id){
+        compteService.delete(id);
+        return ResponseEntity.ok().build();
     }
 }

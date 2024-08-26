@@ -1,6 +1,7 @@
 package com.stockManagment.api.dette;
 
 import com.stockManagment.api.entreprise.EntrepriseDto;
+import com.stockManagment.api.fournisseur.FournisseurDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DetteDto {
     private Integer id;
-    private double some;
+    private double some = 0;
     private EntrepriseDto entreprise;
 
     public static DetteDto fromEntity(Dette dette) {
@@ -37,5 +38,6 @@ public class DetteDto {
 
         return dette;
     }
+
 }
 

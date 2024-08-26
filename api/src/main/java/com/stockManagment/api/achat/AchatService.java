@@ -88,4 +88,9 @@ public class AchatService {
 
         return AchatDto.fromEntity(achatRepo.save(AchatDto.toEntity(achat))).getId();
     }
+
+    public AchatDto findById(Integer id) {
+        return AchatDto.fromEntity(achatRepo.findById(id)
+                .orElseThrow(()->new EntityNotFoundException(ErrorCodes.ACHAT_NOT_FOUND.getDescription(),ErrorCodes.ACHAT_NOT_FOUND)));
+    }
 }

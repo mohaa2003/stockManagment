@@ -43,6 +43,17 @@ public class GlobalExceptionHandler {
                         .errorDescription(exception.getErrorCodes().getDescription())
                         .build());
     }
+    @ExceptionHandler(OutOfException.class)
+    public ResponseEntity<ExceptionDto> handleException(OutOfException exception){
+        exception.printStackTrace();
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ExceptionDto.builder()
+                        .errorCode(exception.getErrorCodes().getCode())
+                        .businessDescribtion(exception.getErrorCodes().getDescription())
+                        .errorDescription(exception.getErrorCodes().getDescription())
+                        .build());
+    }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionDto> handleException(MethodArgumentNotValidException exception){
         Set<String> errors = new HashSet<>();

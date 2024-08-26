@@ -28,6 +28,9 @@ public enum ErrorCodes {
 
     OUT_OF_STOCK(510,"You haven't enough stock of this product"),
     OUT_OF_MONEY(520,"You haven't enough money in your balance"),
+
+    HAS_DEBT(530,"Can not delete a partner have debts"),
+
     NO_CODE(0,"No CODE")
     ;
     private final int code ;
