@@ -1,8 +1,4 @@
 package com.stockManagment.api.ligneAchat;
-
-import com.stockManagment.api.client.Client;
-import com.stockManagment.api.client.ClientDto;
-import com.stockManagment.api.client.ClientRepo;
 import com.stockManagment.api.exceptions.EntityNotFoundException;
 import com.stockManagment.api.exceptions.ErrorCodes;
 import lombok.RequiredArgsConstructor;
@@ -16,33 +12,26 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class LigneAchatService {
-    private final ClientRepo clientRepo;
+    private final LigneAchatRepo ligneAchatRepo;
 
-    public ClientDto findById(Integer id) {
+    public LigneAchatDto findById(Integer id) {
 
         if(id == null){
-            log.error("client id est null");
+            log.error("ligne achat id est null");
             return null;
         }
-        Client client = clientRepo.findById(id)
+        LigneAchat ligneAchat = ligneAchatRepo.findById(id)
 
-                .orElseThrow(()->new EntityNotFoundException(ErrorCodes.CLIENT_NOT_FOUND.getDescription()+" with id = "+id,ErrorCodes.CLIENT_NOT_FOUND));
+                .orElseThrow(()->new EntityNotFoundException(ErrorCodes.LIGNE_ACHAT_NOT_FOUND.getDescription()+" with id = "+id,ErrorCodes.LIGNE_ACHAT_NOT_FOUND));
 
-        return ClientDto.fromEntity(client);
-
-    }
-
-    public List<ClientDto> findAll(){
-
-        return clientRepo.findAll().stream().map(ClientDto::fromEntity).collect(Collectors.toList());
+        return LigneAchatDto.fromEntity(ligneAchat);
 
     }
 
-    public void delete(Integer id) {
-        if (id == null){
-            log.error("Client non valid !");
-        }
-        clientRepo.deleteById(id);
+    public List<LigneAchatDto> findAll(){
+
+        return ligneAchatRepo.findAll().stream().map(LigneAchatDto::fromEntity).collect(Collectors.toList());
+
     }
-}
+
 }

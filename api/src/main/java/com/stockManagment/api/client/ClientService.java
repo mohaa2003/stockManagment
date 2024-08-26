@@ -55,7 +55,7 @@ public class ClientService {
             if(dette.isPresent()){
                 DetteDto detteDto = DetteClientDto.fromEntity(dette.get());
                 if (detteDto.getSome() != 0){
-                    throw new OutOfException(ErrorCodes.HAS_DEBT.getDescription(),ErrorCodes.HAS_DEBT);
+                    throw new OutOfException(ErrorCodes.HAS_DEBT.getDescription(),ErrorCodes.HAS_DEBT,detteDto.getSome());
                 }
             }
 

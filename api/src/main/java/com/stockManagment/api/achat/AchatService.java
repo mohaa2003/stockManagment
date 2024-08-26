@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Slf4j
@@ -44,7 +45,11 @@ public class AchatService {
         List<LigneAchatDto> listeDesAchat = achat.getLigneAchatList();
 
         listeDesAchat.stream().forEach((LigneAchatDto ligneAchatDto)-> {
-            Produit produit = produitRepo.findById(ligneAchatDto.getProduit().getId()).orElseThrow(()->new EntityNotFoundException(ErrorCodes.PRODUIT_NOT_FOUND.getDescription()+" with id = "+ligneAchatDto.getProduit().getId(),ErrorCodes.PRODUIT_NOT_FOUND));
+            Optional<Produit> produit = produitRepo.findById(ligneAchatDto.getProduit().getId());
+            if(produit.isEmpty()){
+                log.warn("Produit missing !");
+                throw new EntityNotFoundException(ErrorCodes.PRODUIT_NOT_FOUND.getDescription()+" with id = "+ligneAchatDto.getProduit().getId(),ErrorCodes.PRODUIT_NOT_FOUND);
+            }
             ProduitDto produitDto = ligneAchatDto.getProduit();
             Integer produitQtt = produitDto.getQuantiteDisponible();
             produitDto.setQuantiteDisponible(produitQtt + ligneAchatDto.getQuantite());
@@ -54,11 +59,15 @@ public class AchatService {
         });
 
         //traitement de compte
-        Compte compte = compteRepo.findById(achat.getCompte().getId())
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCodes.COMPTE_NOT_FOUND.getDescription(),ErrorCodes.COMPTE_NOT_FOUND));
+        Optional<Compte> compte = compteRepo.findById(achat.getCompte().getId());
+        if(compte.isEmpty()){
+            log.warn("Compte missing !");
+            throw new EntityNotFoundException(ErrorCodes.COMPTE_NOT_FOUND.getDescription(),ErrorCodes.COMPTE_NOT_FOUND);
+        }
         CompteDto currentCompte = achat.getCompte();
         Double balance = currentCompte.getCredit();
         if(achat.getSomePaye()>balance){
+            log.warn("Balance insuffisante");
             throw new OutOfException("You have only "+balance+" in your balance",ErrorCodes.OUT_OF_MONEY,balance);
         }
         currentCompte.setCredit(currentCompte.getCredit() - achat.getSomePaye()) ;
@@ -66,19 +75,26 @@ public class AchatService {
 
         //traitement de fournisseur et des dettes
         if(achat.getPrixAchatTotal() < achat.getPrixApresRemise()){
+            log.warn("prixAchatTotal should be greater than prixApresRemise");
             throw new IllegalArgumentException("prixAchatTotal should be greater than prixApresRemise");
         }
         //typically i should make a verification if prix is less than the prix paye but i think about if he pays more than the buying price and mkach sarf !
 
         Double dette = achat.getPrixApresRemise() - achat.getSomePaye();
         if(dette != 0.0){
-            Fournisseur fournisseur = fournisseurRepo.findById(achat.getFournisseur().getId())
-                    .orElseThrow(()->new EntityNotFoundException(ErrorCodes.FOURNISSEUR_NOT_FOUND.getDescription(),ErrorCodes.FOURNISSEUR_NOT_FOUND));
+            Optional<Fournisseur> fournisseur = fournisseurRepo.findById(achat.getFournisseur().getId());
+            if(fournisseur.isEmpty()){
+                log.warn("Fournisseur missing");
+                throw new EntityNotFoundException(ErrorCodes.FOURNISSEUR_NOT_FOUND.getDescription(),ErrorCodes.FOURNISSEUR_NOT_FOUND);
+            }
             FournisseurDto fournisseurDto = achat.getFournisseur();
 
 
-            Dette detteEntity = detteRepo.findById(achat.getFournisseur().getDetteFournisseur().getId())
-                    .orElseThrow(()->new EntityNotFoundException(ErrorCodes.DETTE_NOT_FOUND.getDescription(),ErrorCodes.DETTE_NOT_FOUND));
+            Optional<Dette> detteEntity = detteRepo.findById(achat.getFournisseur().getDetteFournisseur().getId());
+            if(detteEntity.isEmpty()){
+                log.warn("Dette missing");
+                throw new EntityNotFoundException(ErrorCodes.DETTE_NOT_FOUND.getDescription(),ErrorCodes.DETTE_NOT_FOUND);
+            }
 
             DetteDto detteObject = fournisseurDto.getDetteFournisseur();
 

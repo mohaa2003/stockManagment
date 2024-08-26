@@ -23,6 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -47,6 +49,7 @@ public class VenteService {
             ProduitDto produitDto = ligneVenteDto.getProduit();
             Integer produitQtt = produitDto.getQuantiteDisponible();
             if(ligneVenteDto.getQuantite() > produitQtt){
+                log.warn("Insuffisant stock");
                 throw new OutOfException(ErrorCodes.OUT_OF_STOCK.getDescription()+" you have only "+produitQtt,ErrorCodes.OUT_OF_STOCK,produitQtt);
             }
             produitDto.setQuantiteDisponible(produitQtt - ligneVenteDto.getQuantite());
@@ -56,8 +59,11 @@ public class VenteService {
         });
 
         //traitement de compte
-        Compte compte = compteRepo.findById(vente.getCompte().getId())
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCodes.COMPTE_NOT_FOUND.getDescription(),ErrorCodes.COMPTE_NOT_FOUND));
+        Optional<Compte> compte = compteRepo.findById(vente.getCompte().getId());
+        if(compte.isEmpty()){
+            log.warn("Compte missing !");
+                            throw  new EntityNotFoundException(ErrorCodes.COMPTE_NOT_FOUND.getDescription(),ErrorCodes.COMPTE_NOT_FOUND);
+        }
         CompteDto currentCompte = vente.getCompte();
         Double balance = currentCompte.getCredit();
         currentCompte.setCredit(balance + vente.getSomePaye()) ;
@@ -65,17 +71,24 @@ public class VenteService {
 
         //traitement de client et des dettes
         if(vente.getPrixTotaleVente() < vente.getPrixApresRemise()){
+            log.warn("prixAchatTotal should be greater than prixApresRemise");
             throw new IllegalArgumentException("prixAchatTotal should be greater than prixApresRemise");
         }
         Double dette = vente.getPrixApresRemise() - vente.getSomePaye();
         if(dette != 0.0){
-            Client client = clientRepo.findById(vente.getClient().getId())
-                    .orElseThrow(()->new EntityNotFoundException(ErrorCodes.CLIENT_NOT_FOUND.getDescription(),ErrorCodes.CLIENT_NOT_FOUND));
+            Optional<Client> client = clientRepo.findById(vente.getClient().getId());
+            if(client.isEmpty()){
+                log.warn("Client missing !");
+                throw new EntityNotFoundException(ErrorCodes.CLIENT_NOT_FOUND.getDescription(),ErrorCodes.CLIENT_NOT_FOUND);
+            }
             ClientDto clientDto = vente.getClient();
 
 
-            Dette detteEntity = detteRepo.findById(vente.getClient().getDetteClient().getId())
-                    .orElseThrow(()->new EntityNotFoundException(ErrorCodes.DETTE_NOT_FOUND.getDescription(),ErrorCodes.DETTE_NOT_FOUND));
+            Optional<Dette> detteEntity = detteRepo.findById(vente.getClient().getDetteClient().getId());
+            if(detteEntity.isEmpty()){
+                log.warn("Dette missing !");
+                throw new EntityNotFoundException(ErrorCodes.DETTE_NOT_FOUND.getDescription(),ErrorCodes.DETTE_NOT_FOUND);
+            }
 
             DetteDto detteObject = clientDto.getDetteClient();
 

@@ -20,6 +20,7 @@ public class Versement extends SuperEntity {
     private DetteType typeVersement;
     @Column(nullable = false)
     private Double some;
+    private String comment;
 
 
     @ManyToOne

@@ -60,7 +60,7 @@ public class FournisseurService {
             if(dette.isPresent()){
                 DetteDto detteDto = DetteFournisseurDto.fromEntity(dette.get());
                 if (detteDto.getSome() != 0){
-                    throw new OutOfException(ErrorCodes.HAS_DEBT.getDescription(),ErrorCodes.HAS_DEBT);
+                    throw new OutOfException(ErrorCodes.HAS_DEBT.getDescription(),ErrorCodes.HAS_DEBT,detteDto.getSome());
                 }
             }
 

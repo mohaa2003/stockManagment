@@ -26,6 +26,7 @@ public class AchatDto {
     private FournisseurDto fournisseur;
     private CompteDto compte;
     private EntrepriseDto entreprise;
+    private String comment;
 
     public static AchatDto fromEntity(Achat achat) {
         if (achat == null) {
@@ -42,7 +43,8 @@ public class AchatDto {
                 achat.getLigneAchatList().stream().map(LigneAchatDto::fromEntity).collect(Collectors.toList()),
                 FournisseurDto.fromEntity(achat.getFournisseur()),
                 CompteDto.fromEntity(achat.getCompte()),
-                EntrepriseDto.fromEntity(achat.getEntreprise())
+                EntrepriseDto.fromEntity(achat.getEntreprise()),
+                achat.getComment()
         );
     }
 
@@ -59,6 +61,7 @@ public class AchatDto {
                 achat.setPrixApresRemise(achatDto.getPrixApresRemise());
                 achat.setStatutLivraison(achatDto.getStatutLivraison());
                 achat.setStatutPayement(achatDto.getStatutPayement());
+                achat.setComment(achatDto.getComment());
                 achat.setLigneAchatList(achatDto.getLigneAchatList().stream().map(LigneAchatDto::toEntity).collect(Collectors.toList()));
                 achat.setFournisseur(FournisseurDto.toEntity(achatDto.getFournisseur()));
                 achat.setCompte(CompteDto.toEntity(achatDto.getCompte()));

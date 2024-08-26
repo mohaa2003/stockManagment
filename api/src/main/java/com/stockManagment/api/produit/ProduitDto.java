@@ -3,7 +3,6 @@ package com.stockManagment.api.produit;
 import com.stockManagment.api.categorie.CategorieDto;
 import com.stockManagment.api.entreprise.EntrepriseDto;
 import com.stockManagment.api.ligneAchat.LigneAchatDto;
-import com.stockManagment.api.ligneVente.LigneVenteDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +21,7 @@ public class ProduitDto {
     private Double prix;
     private Integer quantiteDisponible;
     private List<LigneAchatDto> ligneAchatList;
-    private List<LigneVenteDto> ligneVenteList;
+    private List<com.stockManagment.api.ligneVente.LigneVenteDto> ligneVenteList;
     private CategorieDto categorie;
     private EntrepriseDto entreprise;
 
@@ -39,7 +38,7 @@ public class ProduitDto {
                 produit.getPrix(),
                 produit.getQuantiteDisponible(),
                 produit.getLigneAchatList().stream().map(LigneAchatDto::fromEntity).collect(Collectors.toList()),
-                produit.getLigneVenteList().stream().map(LigneVenteDto::fromEntity).collect(Collectors.toList()),
+                produit.getLigneVenteList().stream().map(com.stockManagment.api.ligneVente.LigneVenteDto::fromEntity).collect(Collectors.toList()),
                 CategorieDto.fromEntity(produit.getCategorie()),
                 EntrepriseDto.fromEntity(produit.getEntreprise())
         );
@@ -58,7 +57,7 @@ public class ProduitDto {
         produit.setPrix(produitDto.getPrix());
         produit.setQuantiteDisponible(produitDto.getQuantiteDisponible());
         produit.setLigneAchatList(produitDto.getLigneAchatList().stream().map(LigneAchatDto::toEntity).collect(Collectors.toList()));
-        produit.setLigneVenteList(produitDto.getLigneVenteList().stream().map(LigneVenteDto::toEntity).collect(Collectors.toList()));
+        produit.setLigneVenteList(produitDto.getLigneVenteList().stream().map(com.stockManagment.api.ligneVente.LigneVenteDto::toEntity).collect(Collectors.toList()));
         produit.setCategorie(CategorieDto.toEntity(produitDto.getCategorie()));
         produit.setEntreprise(EntrepriseDto.toEntity(produitDto.getEntreprise()));
 

@@ -32,6 +32,7 @@ public class Achat extends SuperEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "statut_de_payement",nullable = false)
     private StatutPayement statutPayement = StatutPayement.AVEC_DETTE;
+    private String comment;
 
     @OneToMany(mappedBy = "achat",cascade = CascadeType.ALL)
     @JsonIgnore

@@ -27,6 +27,7 @@ public class VenteDto {
     private ClientDto client;
     private CompteDto compte;
     private EntrepriseDto entreprise;
+    private String comment;
 
     public static VenteDto fromEntity(Vente vente) {
         if (vente == null) {
@@ -43,7 +44,8 @@ public class VenteDto {
                 vente.getLigneVenteList().stream().map(LigneVenteDto::fromEntity).collect(Collectors.toList()),
                 ClientDto.fromEntity(vente.getClient()),
                 CompteDto.fromEntity(vente.getCompte()),
-                EntrepriseDto.fromEntity(vente.getEntreprise())
+                EntrepriseDto.fromEntity(vente.getEntreprise()),
+                vente.getComment()
         );
     }
 
@@ -63,6 +65,7 @@ public class VenteDto {
         vente.setClient(ClientDto.toEntity(venteDto.getClient()));
         vente.setCompte(CompteDto.toEntity(venteDto.getCompte()));
         vente.setEntreprise(EntrepriseDto.toEntity(venteDto.getEntreprise()));
+        vente.setComment(venteDto.getComment());
 
         return vente;
     }

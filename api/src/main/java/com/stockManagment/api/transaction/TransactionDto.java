@@ -19,6 +19,7 @@ public class TransactionDto {
     private AgentDto agent;
     private CompteDto compte;
     private EntrepriseDto entreprise;
+    private String comment;
 
     public static TransactionDto fromEntity(Transaction transaction) {
         if (transaction == null) {
@@ -33,7 +34,8 @@ public class TransactionDto {
                 transaction.getPrixPaye(),
                 AgentDto.fromEntity(transaction.getAgent()),
                 CompteDto.fromEntity(transaction.getCompte()),
-                EntrepriseDto.fromEntity(transaction.getEntreprise())
+                EntrepriseDto.fromEntity(transaction.getEntreprise()),
+                transaction.getComment()
         );
     }
 
@@ -51,6 +53,7 @@ public class TransactionDto {
         transaction.setAgent(AgentDto.toEntity(transactionDto.getAgent()));
         transaction.setCompte(CompteDto.toEntity(transactionDto.getCompte()));
         transaction.setEntreprise(EntrepriseDto.toEntity(transactionDto.getEntreprise()));
+        transaction.setComment(transactionDto.getComment());
 
         return transaction;
     }

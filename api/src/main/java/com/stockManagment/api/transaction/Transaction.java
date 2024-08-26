@@ -26,6 +26,7 @@ public class Transaction  extends SuperEntity {
     private Double prix;
     @Column(name = "prix_paye", nullable = false)
     private Double prixPaye = this.prix;  //si le prix paye inferieur de prix un classe de type dette va etre creee
+    private String comment;
 
     @ManyToOne
     @JoinColumn(name = "id_agent")  //not required !

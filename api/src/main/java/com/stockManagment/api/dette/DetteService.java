@@ -14,12 +14,6 @@ import java.util.stream.Collectors;
 public class DetteService {
     private final DetteRepo detteRepo;
 
-    public Integer save(DetteDto dette) {
-
-        return DetteDto.fromEntity(detteRepo.save(DetteDto.toEntity(dette))).getId();
-
-    }
-
     public DetteDto findById(Integer id) {
 
         if(id == null){
@@ -38,13 +32,6 @@ public class DetteService {
 
         return detteRepo.findAll().stream().map(DetteDto::fromEntity).collect(Collectors.toList());
 
-    }
-
-    public void delete(Integer id) {
-        if (id == null){
-            log.error("Dette non valid !");
-        }
-        detteRepo.deleteById(id);
     }
 }
 
