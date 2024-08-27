@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class VersementDto {
     private Integer id;
+    private Boolean isDeleted;
     private DetteType typeVersement;
     //le versement ici doit etre positive toujour !
     private Double some;
@@ -26,6 +27,7 @@ public class VersementDto {
 
         return new VersementDto(
                 versement.getId(),
+                versement.getIsDeleted(),
                 versement.getTypeVersement(),
                 versement.getSome(),
                 CompteDto.fromEntity(versement.getCompte()),
@@ -41,6 +43,7 @@ public class VersementDto {
 
         Versement versement = new Versement();
         versement.setId(versementDto.getId());
+        versement.setIsDeleted(versementDto.isDeleted);
         versement.setTypeVersement(versementDto.getTypeVersement());
         versement.setSome(versementDto.getSome());
         versement.setCompte(CompteDto.toEntity(versementDto.getCompte()));

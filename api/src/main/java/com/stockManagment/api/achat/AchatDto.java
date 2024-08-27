@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class AchatDto {
     private Integer id;
+    private Boolean isDeleted;
     private Double prixAchatTotal;
     private Double somePaye;
     private Double prixApresRemise;
@@ -35,6 +36,7 @@ public class AchatDto {
 
         return new AchatDto(
                 achat.getId(),
+                achat.getIsDeleted(),
                 achat.getPrixAchatTotal(),
                 achat.getSomePaye(),
                 achat.getPrixApresRemise(),
@@ -56,6 +58,7 @@ public class AchatDto {
         Achat achat = new Achat();
 
                 achat.setId(achatDto.getId());
+                achat.setIsDeleted(achatDto.getIsDeleted());
                 achat.setPrixAchatTotal(achatDto.getPrixAchatTotal());
                 achat.setSomePaye(achatDto.getSomePaye());
                 achat.setPrixApresRemise(achatDto.getPrixApresRemise());

@@ -12,5 +12,5 @@ public class SuperEntity implements Serializable{
     private Integer id;
 
     @Column(name = "est_supprime")
-    private boolean isDeleted = false;
+    private Boolean isDeleted = false;
 }

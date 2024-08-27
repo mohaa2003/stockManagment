@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class FournisseurDto {
     private Integer id;
+    private Boolean isDeleted;
     private String nomFournisseur;
     private String surnomFournisseur;
     private String numTlph;
@@ -29,6 +30,7 @@ public class FournisseurDto {
 
         return new FournisseurDto(
                 fournisseur.getId(),
+                fournisseur.getIsDeleted(),
                 fournisseur.getNomFournisseur(),
                 fournisseur.getSurnomFournisseur(),
                 fournisseur.getNumTlph(),
@@ -45,6 +47,7 @@ public class FournisseurDto {
 
         Fournisseur fournisseur = new Fournisseur();
         fournisseur.setId(fournisseurDto.getId());
+        fournisseur.setIsDeleted(fournisseurDto.getIsDeleted());
         fournisseur.setNomFournisseur(fournisseurDto.getNomFournisseur());
         fournisseur.setSurnomFournisseur(fournisseurDto.getSurnomFournisseur());
         fournisseur.setNumTlph(fournisseurDto.getNumTlph());

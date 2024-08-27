@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class VenteDto {
     private Integer id;
+    private Boolean isDeleted;
     private Double prixTotaleVente;
     private Double prixApresRemise;
     private Double somePaye;
@@ -36,6 +37,7 @@ public class VenteDto {
 
         return new VenteDto(
                 vente.getId(),
+                vente.getIsDeleted(),
                 vente.getPrixTotaleVente(),
                 vente.getPrixApresRemise(),
                 vente.getSomePaye(),
@@ -56,6 +58,7 @@ public class VenteDto {
 
         Vente vente = new Vente();
         vente.setId(venteDto.getId());
+        vente.setIsDeleted(venteDto.getIsDeleted());
         vente.setPrixTotaleVente(venteDto.getPrixTotaleVente());
         vente.setPrixApresRemise(venteDto.getPrixApresRemise());
         vente.setSomePaye(venteDto.getSomePaye());

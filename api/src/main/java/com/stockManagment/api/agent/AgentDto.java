@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class AgentDto {
     private Integer id;
+    private Boolean isDeleted;
     private String nomAgent;
     private String surnomAgent;
     private String numTlph;
@@ -30,6 +31,7 @@ public class AgentDto {
 
         return new AgentDto(
                 agent.getId(),
+                agent.getIsDeleted(),
                 agent.getNomAgent(),
                 agent.getSurnomAgent(),
                 agent.getNumTlph(),
@@ -47,6 +49,7 @@ public class AgentDto {
 
         Agent agent = new Agent();
         agent.setId(agentDto.getId());
+        agent.setIsDeleted(agentDto.isDeleted);
         agent.setNomAgent(agentDto.getNomAgent());
         agent.setSurnomAgent(agentDto.getSurnomAgent());
         agent.setNumTlph(agentDto.getNumTlph());

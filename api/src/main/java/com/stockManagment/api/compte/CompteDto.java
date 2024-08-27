@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class CompteDto {
     private Integer id;
+    private Boolean isDeleted;
     private TypeCompte nomCompte;
     private Double credit;
     private List<VersementDto> versementList;
@@ -32,6 +33,7 @@ public class CompteDto {
 
         return new CompteDto(
                 compte.getId(),
+                compte.getIsDeleted(),
                 compte.getNomCompte(),
                 compte.getCredit(),
                 compte.getVersementList().stream().map(VersementDto::fromEntity).collect(Collectors.toList()),
@@ -49,6 +51,7 @@ public class CompteDto {
 
         Compte compte = new Compte();
         compte.setId(compteDTO.getId());
+        compte.setIsDeleted(compteDTO.getIsDeleted());
         compte.setNomCompte(compteDTO.getNomCompte());
         compte.setCredit(compteDTO.getCredit());
         compte.setVersementList(compteDTO.getVersementList().stream().map(VersementDto::toEntity).collect(Collectors.toList()));

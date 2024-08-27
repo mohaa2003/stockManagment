@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TransactionDto {
     private Integer id;
+    private Boolean isDeleted;
     private TypeTransaction typeTransaction;
     private Double intitule;
     private Double prix;
@@ -28,6 +29,7 @@ public class TransactionDto {
 
         return new TransactionDto(
                 transaction.getId(),
+                transaction.getIsDeleted(),
                 transaction.getTypeTransaction(),
                 transaction.getIntitule(),
                 transaction.getPrix(),
@@ -46,6 +48,7 @@ public class TransactionDto {
 
         Transaction transaction = new Transaction();
         transaction.setId(transactionDto.getId());
+        transaction.setIsDeleted(transactionDto.getIsDeleted());
         transaction.setTypeTransaction(transactionDto.getTypeTransaction());
         transaction.setIntitule(transactionDto.getIntitule());
         transaction.setPrix(transactionDto.getPrix());

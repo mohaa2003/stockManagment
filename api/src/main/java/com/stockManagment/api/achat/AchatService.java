@@ -121,4 +121,11 @@ public class AchatService {
         return achatRepo.findAll().stream().map(AchatDto::fromEntity).collect(Collectors.toList());
     }
 
+    @Transactional
+    public void delete(Integer id) {
+        if(id == null){
+            log.error("Achat id invalid");
+        }
+
+    }
 }

@@ -32,6 +32,7 @@ public class Achat extends SuperEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "statut_de_payement",nullable = false)
     private StatutPayement statutPayement = StatutPayement.AVEC_DETTE;
+    //this is made for mentioning any probleme who make you delete or update the achat .. or any other detail
     private String comment;
 
     @OneToMany(mappedBy = "achat",cascade = CascadeType.ALL)

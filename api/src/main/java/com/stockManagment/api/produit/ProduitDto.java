@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ProduitDto {
     private Integer id;
+    private Boolean isDeleted;
     private String libele;
     private String marque;
     private String description;
@@ -32,6 +33,7 @@ public class ProduitDto {
 
         return new ProduitDto(
                 produit.getId(),
+                produit.getIsDeleted(),
                 produit.getLibele(),
                 produit.getMarque(),
                 produit.getDescription(),
@@ -51,6 +53,7 @@ public class ProduitDto {
 
         Produit produit = new Produit();
         produit.setId(produitDto.getId());
+        produit.setIsDeleted(produitDto.isDeleted);
         produit.setLibele(produitDto.getLibele());
         produit.setMarque(produitDto.getMarque());
         produit.setDescription(produitDto.getDescription());

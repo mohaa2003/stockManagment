@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ClientDto {
     private Integer id;
+    private Boolean isDeleted;
     private String nomClient;
     private String surnomClient;
     private String numTlph;
@@ -30,6 +31,7 @@ public class ClientDto {
 
         return new ClientDto(
                 client.getId(),
+                client.getIsDeleted(),
                 client.getNomClient(),
                 client.getSurnomClient(),
                 client.getNumTlph(),
@@ -47,6 +49,7 @@ public class ClientDto {
 
         Client client = new Client();
         client.setId(clientDto.getId());
+        client.setIsDeleted(clientDto.isDeleted);
         client.setNomClient(clientDto.getNomClient());
         client.setSurnomClient(clientDto.getSurnomClient());
         client.setNumTlph(clientDto.getNumTlph());

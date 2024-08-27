@@ -1,6 +1,7 @@
 package com.stockManagment.api.agent;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.stockManagment.api.CanBeDeleted;
 import com.stockManagment.api.SuperEntity;
 import com.stockManagment.api.dette.Dette;
 import com.stockManagment.api.entreprise.Entreprise;

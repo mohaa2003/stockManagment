@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UtilisateurDto {
     private Integer id;
+    private Boolean isDeleted;
     private String username;
     private String password;
     private Roles role;
@@ -22,6 +23,7 @@ public class UtilisateurDto {
 
         UtilisateurDto utilisateurDto = new UtilisateurDto();
         utilisateurDto.setId(utilisateur.getId());
+        utilisateurDto.setIsDeleted(utilisateur.getIsDeleted());
         utilisateurDto.setUsername(utilisateur.getUsername());
         utilisateurDto.setPassword(utilisateur.getPassword());
         utilisateurDto.setRole(utilisateur.getRole());
@@ -36,6 +38,7 @@ public class UtilisateurDto {
 
         Utilisateur utilisateur = new Utilisateur();
         utilisateur.setId(utilisateurDto.getId());
+        utilisateur.setIsDeleted(utilisateurDto.isDeleted);
         utilisateur.setUsername(utilisateurDto.getUsername());
         utilisateur.setPassword(utilisateurDto.getPassword());
         utilisateur.setRole(utilisateurDto.getRole());

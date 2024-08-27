@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class EntrepriseDto {
     private Integer id;
+    private Boolean isDeleted;
     private String nomEntreprise;
     private List<UtilisateurDto> utilisateurList;
     private List<ProduitDto> produitList;
@@ -41,6 +42,7 @@ public class EntrepriseDto {
 
         return new EntrepriseDto(
                 entreprise.getId(),
+                entreprise.getIsDeleted(),
                 entreprise.getNomEntreprise(),
                 entreprise.getUtilisateurList().stream().map(UtilisateurDto::fromEntity).collect(Collectors.toList()),
                 entreprise.getProduitList().stream().map(ProduitDto::fromEntity).collect(Collectors.toList()),
@@ -62,6 +64,7 @@ public class EntrepriseDto {
 
         Entreprise entreprise = new Entreprise();
         entreprise.setId(entrepriseDto.getId());
+        entreprise.setIsDeleted(entrepriseDto.isDeleted);
         entreprise.setNomEntreprise(entrepriseDto.getNomEntreprise());
         // Conversion des listes d'entités à partir de Dtos n'est généralement pas nécessaire
 
