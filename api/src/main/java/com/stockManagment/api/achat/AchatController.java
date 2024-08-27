@@ -1,11 +1,10 @@
 package com.stockManagment.api.achat;
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -21,5 +20,16 @@ public class AchatController {
 
     public ResponseEntity<AchatDto> findById(Integer id){
         return ResponseEntity.ok(achatService.findById(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AchatDto>> findAll(){
+        return ResponseEntity.ok(achatService.findAll());
+    }
+
+    @DeleteMapping
+    public ResponseEntity delete(@PathVariable Integer id){
+        achatService.delete(id);
+        return ResponseEntity.ok().build();
     }
 }
