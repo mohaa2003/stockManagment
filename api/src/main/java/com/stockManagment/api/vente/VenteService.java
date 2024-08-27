@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -98,4 +99,20 @@ public class VenteService {
 
         return venteRepo.save(VenteDto.toEntity(vente)).getId();
     }
+
+    public VenteDto findById(Integer id) {
+        if(id == null){
+            log.error("Vente id est null");
+            return null;
+        }
+
+        Vente vente = venteRepo.findById(id)
+                .orElseThrow(()->new EntityNotFoundException(ErrorCodes.VENTE_NOT_FOUND.getDescription()+" with id = "+id,ErrorCodes.VENTE_NOT_FOUND));
+        return VenteDto.fromEntity(vente);
+    }
+
+    public List<VenteDto> findAll(){
+        return venteRepo.findAll().stream().map(VenteDto::fromEntity).collect(Collectors.toList());
+    }
+
 }

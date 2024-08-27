@@ -1,8 +1,4 @@
 package com.stockManagment.api.categorie;
-
-import com.stockManagment.api.compte.Compte;
-import com.stockManagment.api.compte.CompteDto;
-import com.stockManagment.api.compte.CompteRepo;
 import com.stockManagment.api.exceptions.EntityNotFoundException;
 import com.stockManagment.api.exceptions.ErrorCodes;
 import lombok.RequiredArgsConstructor;

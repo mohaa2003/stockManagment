@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -106,7 +107,18 @@ public class AchatService {
     }
 
     public AchatDto findById(Integer id) {
-        return AchatDto.fromEntity(achatRepo.findById(id)
-                .orElseThrow(()->new EntityNotFoundException(ErrorCodes.ACHAT_NOT_FOUND.getDescription(),ErrorCodes.ACHAT_NOT_FOUND)));
+        if(id == null){
+            log.error("Achat id est null");
+            return null;
+        }
+
+        Achat achat = achatRepo.findById(id)
+                .orElseThrow(()->new EntityNotFoundException(ErrorCodes.ACHAT_NOT_FOUND.getDescription()+" with id = "+id,ErrorCodes.ACHAT_NOT_FOUND));
+        return AchatDto.fromEntity(achat);
     }
+
+    public List<AchatDto> findAll(){
+        return achatRepo.findAll().stream().map(AchatDto::fromEntity).collect(Collectors.toList());
+    }
+
 }

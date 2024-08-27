@@ -13,7 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -65,4 +67,20 @@ public class VersementService {
 
         return versementRepo.save(VersementDto.toEntity(versement)).getId();
     }
+
+    public VersementDto findById(Integer id) {
+        if(id == null){
+            log.error("versement id est null");
+            return null;
+        }
+
+        Versement versement = versementRepo.findById(id)
+                .orElseThrow(()->new EntityNotFoundException(ErrorCodes.VERSEMENT_NOT_FOUND.getDescription()+" with id = "+id,ErrorCodes.VERSEMENT_NOT_FOUND));
+        return VersementDto.fromEntity(versement);
+    }
+
+    public List<VersementDto> findAll(){
+        return versementRepo.findAll().stream().map(VersementDto::fromEntity).collect(Collectors.toList());
+    }
+
 }

@@ -17,7 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -79,5 +81,20 @@ public class TransactionService {
         return transactionRepo.save(TransactionDto.toEntity(transaction)).getId();
     }
 
+    public TransactionDto findById(Integer id) {
+        if(id == null){
+            log.error("Transaction id est null");
+            return null;
+        }
+
+        Transaction transaction = transactionRepo.findById(id)
+                .orElseThrow(()->new EntityNotFoundException(ErrorCodes.TRANSACTION_NOT_FOUND.getDescription()+" with id = "+id,ErrorCodes.TRANSACTION_NOT_FOUND));
+        return TransactionDto.fromEntity(transaction);
+    }
+
+
+    public List<TransactionDto> findAll(){
+        return transactionRepo.findAll().stream().map(TransactionDto::fromEntity).collect(Collectors.toList());
+    }
 
 }
