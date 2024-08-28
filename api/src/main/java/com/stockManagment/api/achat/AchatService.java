@@ -41,14 +41,80 @@ public class AchatService {
     @Transactional
     public Integer save(AchatDto achat) {
 
+        //Implementing update logique (test)
+        if(achatRepo.existsById(achat.getId())){
+            AchatDto currentAchat = AchatDto.fromEntity(achatRepo.findById(achat.getId()).get());
+
+            //verification de la suffisance de stock !
+
+            List<LigneAchatDto> listeDesAchat = currentAchat.getLigneAchatList();
+            if(listeDesAchat.isEmpty() || listeDesAchat == null){
+                throw new IllegalArgumentException("Error ! existing of a buying without any lines is impossible ");
+            }
+            listeDesAchat.stream().forEach((LigneAchatDto ligneAchatDto)-> {
+                Optional<Produit> produit = produitRepo.findById(ligneAchatDto.getProduit().getId());
+                if(produit.isEmpty()){
+                    log.warn("Error! Product missing in the line");
+                    throw new EntityNotFoundException(ErrorCodes.PRODUIT_NOT_FOUND.getDescription()+" with id = "+ligneAchatDto.getProduit().getId(),ErrorCodes.PRODUIT_NOT_FOUND);
+                }
+                ProduitDto produitDto = ligneAchatDto.getProduit();
+                Integer produitQtt = produitDto.getQuantiteDisponible();
+                produitDto.setQuantiteDisponible(produitQtt - ligneAchatDto.getQuantite());
+                produitRepo.save(ProduitDto.toEntity(produitDto));
+
+                ligneAchatRepo.deleteById(ligneAchatDto.getId());
+            });
+
+            //traitement de compte
+            Optional<Compte> compte = compteRepo.findById(achat.getCompte().getId());
+            if(compte.isEmpty()){
+                log.warn("Compte missing in the current achat !");
+                throw new EntityNotFoundException(ErrorCodes.COMPTE_NOT_FOUND.getDescription(),ErrorCodes.COMPTE_NOT_FOUND);
+            }
+            CompteDto currentCompte = achat.getCompte();
+            Double balance = currentCompte.getCredit();
+            currentCompte.setCredit(balance + achat.getSomePaye()) ;
+            compteRepo.save(CompteDto.toEntity(currentCompte));
+
+            //traitement de fournisseur et des dettes
+            if(achat.getPrixAchatTotal() < achat.getPrixApresRemise()){
+                log.warn("Error ! prixAchatTotal should be greater than prixApresRemise");
+                throw new IllegalArgumentException("prixAchatTotal should be greater than prixApresRemise");
+            }
+            //typically i should make a verification if prix is less than the prix paye but i think about if he pays more than the buying price and mkach sarf !
+
+            Double dette = achat.getPrixApresRemise() - achat.getSomePaye();
+                Optional<Fournisseur> fournisseur = fournisseurRepo.findById(achat.getFournisseur().getId());
+                if(fournisseur.isEmpty()){
+                    log.warn("Error ! Fournisseur missing in updated Achat");
+                    throw new EntityNotFoundException(ErrorCodes.FOURNISSEUR_NOT_FOUND.getDescription(),ErrorCodes.FOURNISSEUR_NOT_FOUND);
+                }
+                FournisseurDto fournisseurDto = achat.getFournisseur();
+
+
+                Optional<Dette> detteEntity = detteRepo.findById(achat.getFournisseur().getDetteFournisseur().getId());
+                if(detteEntity.isEmpty()){
+                    log.warn("Error ! Dette missing in updated Achat");
+                    throw new EntityNotFoundException(ErrorCodes.DETTE_NOT_FOUND.getDescription(),ErrorCodes.DETTE_NOT_FOUND);
+                }
+
+                DetteDto detteObject = fournisseurDto.getDetteFournisseur();
+
+                detteObject.setSome(detteObject.getSome() + dette);
+                detteRepo.save(DetteDto.toEntity(detteObject));
+        }
+    //New adding
+
         //verification de la suffisance de stock !
 
         List<LigneAchatDto> listeDesAchat = achat.getLigneAchatList();
-
+        if(listeDesAchat.isEmpty()){
+            throw new IllegalArgumentException("You can't complete a buying without any product");
+        }
         listeDesAchat.stream().forEach((LigneAchatDto ligneAchatDto)-> {
             Optional<Produit> produit = produitRepo.findById(ligneAchatDto.getProduit().getId());
             if(produit.isEmpty()){
-                log.warn("Produit missing !");
+                log.warn("Product missing !");
                 throw new EntityNotFoundException(ErrorCodes.PRODUIT_NOT_FOUND.getDescription()+" with id = "+ligneAchatDto.getProduit().getId(),ErrorCodes.PRODUIT_NOT_FOUND);
             }
             ProduitDto produitDto = ligneAchatDto.getProduit();
