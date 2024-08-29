@@ -48,7 +48,7 @@ public class AchatService {
             //verification de la suffisance de stock !
 
             List<LigneAchatDto> listeDesAchat = currentAchat.getLigneAchatList();
-            if(listeDesAchat.isEmpty() || listeDesAchat == null){
+            if(listeDesAchat == null || listeDesAchat.isEmpty()){
                 throw new IllegalArgumentException("Error ! existing of a buying without any lines is impossible ");
             }
             listeDesAchat.stream().forEach((LigneAchatDto ligneAchatDto)-> {
@@ -66,33 +66,33 @@ public class AchatService {
             });
 
             //traitement de compte
-            Optional<Compte> compte = compteRepo.findById(achat.getCompte().getId());
+            Optional<Compte> compte = compteRepo.findById(currentAchat.getCompte().getId());
             if(compte.isEmpty()){
                 log.warn("Compte missing in the current achat !");
                 throw new EntityNotFoundException(ErrorCodes.COMPTE_NOT_FOUND.getDescription(),ErrorCodes.COMPTE_NOT_FOUND);
             }
-            CompteDto currentCompte = achat.getCompte();
+            CompteDto currentCompte = currentAchat.getCompte();
             Double balance = currentCompte.getCredit();
-            currentCompte.setCredit(balance + achat.getSomePaye()) ;
+            currentCompte.setCredit(balance + currentAchat.getSomePaye()) ;
             compteRepo.save(CompteDto.toEntity(currentCompte));
 
             //traitement de fournisseur et des dettes
-            if(achat.getPrixAchatTotal() < achat.getPrixApresRemise()){
+            if(currentAchat.getPrixAchatTotal() < currentAchat.getPrixApresRemise()){
                 log.warn("Error ! prixAchatTotal should be greater than prixApresRemise");
                 throw new IllegalArgumentException("prixAchatTotal should be greater than prixApresRemise");
             }
             //typically i should make a verification if prix is less than the prix paye but i think about if he pays more than the buying price and mkach sarf !
 
-            Double dette = achat.getPrixApresRemise() - achat.getSomePaye();
-                Optional<Fournisseur> fournisseur = fournisseurRepo.findById(achat.getFournisseur().getId());
+            Double dette = currentAchat.getPrixApresRemise() - currentAchat.getSomePaye();
+                Optional<Fournisseur> fournisseur = fournisseurRepo.findById(currentAchat.getFournisseur().getId());
                 if(fournisseur.isEmpty()){
                     log.warn("Error ! Fournisseur missing in updated Achat");
                     throw new EntityNotFoundException(ErrorCodes.FOURNISSEUR_NOT_FOUND.getDescription(),ErrorCodes.FOURNISSEUR_NOT_FOUND);
                 }
-                FournisseurDto fournisseurDto = achat.getFournisseur();
+                FournisseurDto fournisseurDto = currentAchat.getFournisseur();
 
 
-                Optional<Dette> detteEntity = detteRepo.findById(achat.getFournisseur().getDetteFournisseur().getId());
+                Optional<Dette> detteEntity = detteRepo.findById(currentAchat.getFournisseur().getDetteFournisseur().getId());
                 if(detteEntity.isEmpty()){
                     log.warn("Error ! Dette missing in updated Achat");
                     throw new EntityNotFoundException(ErrorCodes.DETTE_NOT_FOUND.getDescription(),ErrorCodes.DETTE_NOT_FOUND);
@@ -191,6 +191,71 @@ public class AchatService {
     public void delete(Integer id) {
         if(id == null){
             log.error("Achat id invalid");
+        }
+
+        if(achatRepo.existsById(id)){
+            AchatDto currentAchat = AchatDto.fromEntity(achatRepo.findById(id).get());
+
+            //verification de la suffisance de stock !
+
+            List<LigneAchatDto> listeDesAchat = currentAchat.getLigneAchatList();
+            if(listeDesAchat == null || listeDesAchat.isEmpty()){
+                throw new IllegalArgumentException("Error ! existing of a buying without any lines is impossible ");
+            }
+            listeDesAchat.stream().forEach((LigneAchatDto ligneAchatDto)-> {
+                Optional<Produit> produit = produitRepo.findById(ligneAchatDto.getProduit().getId());
+                if(produit.isEmpty()){
+                    log.warn("Enable to delete! Product missing in the line");
+                    throw new EntityNotFoundException(ErrorCodes.PRODUIT_NOT_FOUND.getDescription()+" with id = "+ligneAchatDto.getProduit().getId(),ErrorCodes.PRODUIT_NOT_FOUND);
+                }
+                ProduitDto produitDto = ligneAchatDto.getProduit();
+                Integer produitQtt = produitDto.getQuantiteDisponible();
+                produitDto.setQuantiteDisponible(produitQtt - ligneAchatDto.getQuantite());
+                produitRepo.save(ProduitDto.toEntity(produitDto));
+
+                ligneAchatRepo.deleteById(ligneAchatDto.getId());
+            });
+
+            //traitement de compte
+            Optional<Compte> compte = compteRepo.findById(currentAchat.getCompte().getId());
+            if(compte.isEmpty()){
+                log.warn("Enable to delete ! Compte missing in the current achat !");
+                throw new EntityNotFoundException(ErrorCodes.COMPTE_NOT_FOUND.getDescription(),ErrorCodes.COMPTE_NOT_FOUND);
+            }
+            CompteDto currentCompte = currentAchat.getCompte();
+            Double balance = currentCompte.getCredit();
+            currentCompte.setCredit(balance + currentAchat.getSomePaye()) ;
+            compteRepo.save(CompteDto.toEntity(currentCompte));
+
+            //traitement de fournisseur et des dettes
+            if(currentAchat.getPrixAchatTotal() < currentAchat.getPrixApresRemise()){
+                log.warn("Enable to delete ! prixAchatTotal should be greater than prixApresRemise");
+                throw new IllegalArgumentException("prixAchatTotal should be greater than prixApresRemise");
+            }
+            //typically i should make a verification if prix is less than the prix paye but i think about if he pays more than the buying price and mkach sarf !
+
+            Double dette = currentAchat.getPrixApresRemise() - currentAchat.getSomePaye();
+            Optional<Fournisseur> fournisseur = fournisseurRepo.findById(currentAchat.getFournisseur().getId());
+            if(fournisseur.isEmpty()){
+                log.warn("Enable to delete ! Fournisseur missing in updated Achat");
+                throw new EntityNotFoundException(ErrorCodes.FOURNISSEUR_NOT_FOUND.getDescription(),ErrorCodes.FOURNISSEUR_NOT_FOUND);
+            }
+            FournisseurDto fournisseurDto = currentAchat.getFournisseur();
+
+
+            Optional<Dette> detteEntity = detteRepo.findById(currentAchat.getFournisseur().getDetteFournisseur().getId());
+            if(detteEntity.isEmpty()){
+                log.warn("Enable to delete ! Dette missing in updated Achat");
+                throw new EntityNotFoundException(ErrorCodes.DETTE_NOT_FOUND.getDescription(),ErrorCodes.DETTE_NOT_FOUND);
+            }
+
+            DetteDto detteObject = fournisseurDto.getDetteFournisseur();
+
+            detteObject.setSome(detteObject.getSome() + dette);
+            detteRepo.save(DetteDto.toEntity(detteObject));
+
+            //Setting is Delete to true to do the logical deleting !
+            currentAchat.setIsDeleted(true);
         }
 
     }

@@ -40,13 +40,87 @@ public class VenteService {
 
     @Transactional
     public Integer save(VenteDto vente) {
+        //Implementing update logique (test)
+        if(venteRepo.existsById(vente.getId())){
+            VenteDto currentVente = VenteDto.fromEntity(venteRepo.findById(vente.getId()).get());
+
+            //verification de la suffisance de stock !
+
+            List<LigneVenteDto> listeDesVentes = currentVente.getLigneVenteList();
+            if(listeDesVentes == null || listeDesVentes.isEmpty()){
+                throw new IllegalArgumentException("Error ! existing of a selling without any lines is impossible ");
+            }
+            listeDesVentes.stream().forEach((LigneVenteDto ligneVenteDto)-> {
+                Optional<Produit> produit = produitRepo.findById(ligneVenteDto.getProduit().getId());
+                if(produit.isEmpty()){
+                    log.warn("Error! Product missing in the line");
+                    throw new EntityNotFoundException(ErrorCodes.PRODUIT_NOT_FOUND.getDescription()+" with id = "+ligneVenteDto.getProduit().getId(),ErrorCodes.PRODUIT_NOT_FOUND);
+                }
+                ProduitDto produitDto = ligneVenteDto.getProduit();
+                Integer produitQtt = produitDto.getQuantiteDisponible();
+                produitDto.setQuantiteDisponible(produitQtt + ligneVenteDto.getQuantite());
+                produitRepo.save(ProduitDto.toEntity(produitDto));
+
+                ligneVenteRepo.deleteById(ligneVenteDto.getId());
+            });
+
+            //traitement de compte
+            Optional<Compte> compte = compteRepo.findById(currentVente.getCompte().getId());
+            if(compte.isEmpty()){
+                log.warn("Compte missing in the current vente !");
+                throw new EntityNotFoundException(ErrorCodes.COMPTE_NOT_FOUND.getDescription(),ErrorCodes.COMPTE_NOT_FOUND);
+            }
+            CompteDto currentCompte = currentVente.getCompte();
+            Double balance = currentCompte.getCredit();
+            if(currentVente.getSomePaye()>balance){
+                log.warn("Balance insuffisante when restoring vente informations");
+                throw new OutOfException("You have only "+balance+" in your balance",ErrorCodes.OUT_OF_MONEY,balance);
+            }
+            currentCompte.setCredit(balance - currentVente.getSomePaye()) ;
+            compteRepo.save(CompteDto.toEntity(currentCompte));
+
+            //traitement de client et des dettes
+            if(currentVente.getPrixTotaleVente() < currentVente.getPrixApresRemise()){
+                log.warn("Error ! prixVenteTotal should be greater than prixApresRemise");
+                throw new IllegalArgumentException("prixVenteTotal should be greater than prixApresRemise");
+            }
+            //typically i should make a verification if prix is less than the prix paye but i think about if he pays more than the buying price and mkach sarf !
+
+            Double dette = currentVente.getPrixApresRemise() - currentVente.getSomePaye();
+            Optional<Client> client = clientRepo.findById(currentVente.getClient().getId());
+            if(client.isEmpty()){
+                log.warn("Error ! Client missing in current Vente");
+                throw new EntityNotFoundException(ErrorCodes.CLIENT_NOT_FOUND.getDescription(),ErrorCodes.CLIENT_NOT_FOUND);
+            }
+            ClientDto clientDto = currentVente.getClient();
+
+
+            Optional<Dette> detteEntity = detteRepo.findById(currentVente.getClient().getDetteClient().getId());
+            if(detteEntity.isEmpty()){
+                log.warn("Error ! Dette missing in updated Vente");
+                throw new EntityNotFoundException(ErrorCodes.DETTE_NOT_FOUND.getDescription(),ErrorCodes.DETTE_NOT_FOUND);
+            }
+
+            DetteDto detteObject = clientDto.getDetteClient();
+
+            detteObject.setSome(detteObject.getSome() - dette);
+            detteRepo.save(DetteDto.toEntity(detteObject));
+        }
+
+//New adding
 
         //verification de la suffisance de stock !
 
         List<LigneVenteDto> listeDesVente = vente.getLigneVenteList();
-
+        if(listeDesVente.isEmpty()){
+            throw new IllegalArgumentException("You can't complete a selling without any product");
+        }
         listeDesVente.stream().forEach((LigneVenteDto ligneVenteDto)-> {
-            Produit produit = produitRepo.findById(ligneVenteDto.getProduit().getId()).orElseThrow(()->new EntityNotFoundException(ErrorCodes.PRODUIT_NOT_FOUND.getDescription()+" with id = "+ligneVenteDto.getProduit().getId(),ErrorCodes.PRODUIT_NOT_FOUND));
+            Optional<Produit> produit = produitRepo.findById(ligneVenteDto.getProduit().getId());
+            if(produit.isEmpty()){
+                log.warn("Product missing !");
+                throw new EntityNotFoundException(ErrorCodes.PRODUIT_NOT_FOUND.getDescription()+" with id = "+ligneVenteDto.getProduit().getId(),ErrorCodes.PRODUIT_NOT_FOUND);
+            }
             ProduitDto produitDto = ligneVenteDto.getProduit();
             Integer produitQtt = produitDto.getQuantiteDisponible();
             if(ligneVenteDto.getQuantite() > produitQtt){
@@ -63,7 +137,7 @@ public class VenteService {
         Optional<Compte> compte = compteRepo.findById(vente.getCompte().getId());
         if(compte.isEmpty()){
             log.warn("Compte missing !");
-                            throw  new EntityNotFoundException(ErrorCodes.COMPTE_NOT_FOUND.getDescription(),ErrorCodes.COMPTE_NOT_FOUND);
+            throw  new EntityNotFoundException(ErrorCodes.COMPTE_NOT_FOUND.getDescription(),ErrorCodes.COMPTE_NOT_FOUND);
         }
         CompteDto currentCompte = vente.getCompte();
         Double balance = currentCompte.getCredit();
@@ -115,4 +189,83 @@ public class VenteService {
         return venteRepo.findAll().stream().map(VenteDto::fromEntity).collect(Collectors.toList());
     }
 
+
+
+
+    @Transactional
+    public void delete(Integer id) {
+        if(id==null){
+            log.error("Vente Id is not valid");
+        }
+        //Implementing update logique (test)
+        if(venteRepo.existsById(id)){
+            VenteDto currentVente = VenteDto.fromEntity(venteRepo.findById(id).get());
+
+            //verification de la suffisance de stock !
+
+            List<LigneVenteDto> listeDesVentes = currentVente.getLigneVenteList();
+            if(listeDesVentes == null || listeDesVentes.isEmpty()){
+                throw new IllegalArgumentException("Enable to delete ! existing of a selling without any lines is impossible ");
+            }
+            listeDesVentes.stream().forEach((LigneVenteDto ligneVenteDto)-> {
+                Optional<Produit> produit = produitRepo.findById(ligneVenteDto.getProduit().getId());
+                if(produit.isEmpty()){
+                    log.warn("Enable to delete ! Product missing in the line");
+                    throw new EntityNotFoundException(ErrorCodes.PRODUIT_NOT_FOUND.getDescription()+" with id = "+ligneVenteDto.getProduit().getId(),ErrorCodes.PRODUIT_NOT_FOUND);
+                }
+                ProduitDto produitDto = ligneVenteDto.getProduit();
+                Integer produitQtt = produitDto.getQuantiteDisponible();
+                produitDto.setQuantiteDisponible(produitQtt + ligneVenteDto.getQuantite());
+                produitRepo.save(ProduitDto.toEntity(produitDto));
+
+                ligneVenteRepo.deleteById(ligneVenteDto.getId());
+            });
+
+            //traitement de compte
+            Optional<Compte> compte = compteRepo.findById(currentVente.getCompte().getId());
+            if(compte.isEmpty()){
+                log.warn("Enable to delete, Compte missing in the current vente !");
+                throw new EntityNotFoundException(ErrorCodes.COMPTE_NOT_FOUND.getDescription(),ErrorCodes.COMPTE_NOT_FOUND);
+            }
+            CompteDto currentCompte = currentVente.getCompte();
+            Double balance = currentCompte.getCredit();
+            if(currentVente.getSomePaye()>balance){
+                log.warn("Enable to delete, Balance insuffisante when restoring vente informations");
+                throw new OutOfException("You have only "+balance+" in your balance",ErrorCodes.OUT_OF_MONEY,balance);
+            }
+            currentCompte.setCredit(balance - currentVente.getSomePaye()) ;
+            compteRepo.save(CompteDto.toEntity(currentCompte));
+
+            //traitement de client et des dettes
+            if(currentVente.getPrixTotaleVente() < currentVente.getPrixApresRemise()){
+                log.warn("Enable to delete ! prixVenteTotal should be greater than prixApresRemise");
+                throw new IllegalArgumentException("prixVenteTotal should be greater than prixApresRemise");
+            }
+            //typically i should make a verification if prix is less than the prix paye but i think about if he pays more than the buying price and mkach sarf !
+
+            Double dette = currentVente.getPrixApresRemise() - currentVente.getSomePaye();
+            Optional<Client> client = clientRepo.findById(currentVente.getClient().getId());
+            if(client.isEmpty()){
+                log.warn("Enable to delete ! Client missing in updated Vente");
+                throw new EntityNotFoundException(ErrorCodes.CLIENT_NOT_FOUND.getDescription(),ErrorCodes.CLIENT_NOT_FOUND);
+            }
+            ClientDto clientDto = currentVente.getClient();
+
+
+            Optional<Dette> detteEntity = detteRepo.findById(currentVente.getClient().getDetteClient().getId());
+            if(detteEntity.isEmpty()){
+                log.warn("Enable to delete ! Dette missing in updated Vente");
+                throw new EntityNotFoundException(ErrorCodes.DETTE_NOT_FOUND.getDescription(),ErrorCodes.DETTE_NOT_FOUND);
+            }
+
+            DetteDto detteObject = clientDto.getDetteClient();
+
+            detteObject.setSome(detteObject.getSome() - dette);
+            detteRepo.save(DetteDto.toEntity(detteObject));
+
+            //Setting is Delete to true to do the logical deleting !
+            currentVente.setIsDeleted(true);
+        }
+
+    }
 }
