@@ -1,5 +1,6 @@
 package com.stockManagment.api.vente;
 
+import com.stockManagment.api.achat.AchatDto;
 import com.stockManagment.api.client.Client;
 import com.stockManagment.api.client.ClientDto;
 import com.stockManagment.api.client.ClientRepo;
@@ -265,6 +266,10 @@ public class VenteService {
 
             //Setting is Delete to true to do the logical deleting !
             currentVente.setIsDeleted(true);
+            venteRepo.save(VenteDto.toEntity(currentVente));
+        }
+        else {
+            throw new EntityNotFoundException(ErrorCodes.TRANSACTION_NOT_FOUND.getDescription(),ErrorCodes.TRANSACTION_NOT_FOUND);
         }
 
     }

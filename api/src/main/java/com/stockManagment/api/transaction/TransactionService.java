@@ -1,5 +1,6 @@
 package com.stockManagment.api.transaction;
 
+import com.stockManagment.api.achat.AchatDto;
 import com.stockManagment.api.agent.Agent;
 import com.stockManagment.api.agent.AgentDto;
 import com.stockManagment.api.agent.AgentRepo;
@@ -33,7 +34,61 @@ public class TransactionService {
 
     @Transactional
     public Integer save(TransactionDto transaction) {
+    //Implementing updating logic
+        if(transactionRepo.existsById(transaction.getId())){
+            TransactionDto currentTransaction = TransactionDto.fromEntity(transactionRepo.findById(transaction.getId()).get());
+            //traitement de compte
+            Optional<Compte> compte = compteRepo.findById(currentTransaction.getCompte().getId());
+            if(compte.isEmpty()){
+                log.warn("Error! Compte missing !");
+                throw new EntityNotFoundException(ErrorCodes.COMPTE_NOT_FOUND.getDescription(),ErrorCodes.COMPTE_NOT_FOUND);
+            }
+            CompteDto currentCompte = currentTransaction.getCompte();
+            Double balance = currentCompte.getCredit();
+            if(currentTransaction.getTypeTransaction() == TypeTransaction.GAIN){
+                if(currentTransaction.getPrixPaye()>balance){
+                    log.warn("Error! Balance insuffisante");
+                    throw new OutOfException("You have only "+balance+" in your balance",ErrorCodes.OUT_OF_MONEY,balance);
+                }
+                currentCompte.setCredit(balance - currentTransaction.getPrixPaye()) ;
+            }
+            else{
+                currentCompte.setCredit(balance + currentTransaction.getPrixPaye()) ;
+            }
 
+            compteRepo.save(CompteDto.toEntity(currentCompte));
+
+            //traitement de client et des dettes
+
+            Double dette = currentTransaction.getPrix() + currentTransaction.getPrixPaye();
+            if(currentTransaction.getAgent() != null){
+                Optional<Agent> agent = agentRepo.findById(currentTransaction.getAgent().getId());
+                if(agent.isEmpty()){
+                    log.warn("Error! Agent missing !");
+                    throw new EntityNotFoundException(ErrorCodes.AGENT_NOT_FOUND.getDescription(),ErrorCodes.AGENT_NOT_FOUND);
+                }
+                AgentDto agentDto = currentTransaction.getAgent();
+
+
+                Optional<Dette> detteEntity = detteRepo.findById(currentTransaction.getAgent().getDetteAutre().getId());
+                if(detteEntity.isEmpty()){
+                    log.warn("Error! Dette missing !");
+                    throw new EntityNotFoundException(ErrorCodes.DETTE_NOT_FOUND.getDescription(),ErrorCodes.DETTE_NOT_FOUND);
+                }
+                DetteDto detteObject = agentDto.getDetteAutre();
+
+                detteObject.setSome(detteObject.getSome() - dette);
+                detteRepo.save(DetteDto.toEntity(detteObject));
+            }
+
+        }
+
+
+
+
+
+
+//New adding
         //traitement de compte
         Optional<Compte> compte = compteRepo.findById(transaction.getCompte().getId());
         if(compte.isEmpty()){
@@ -97,4 +152,57 @@ public class TransactionService {
         return transactionRepo.findAll().stream().map(TransactionDto::fromEntity).collect(Collectors.toList());
     }
 
+    public void delete(Integer id) {
+        if(transactionRepo.existsById(id)){
+            TransactionDto currentTransaction = TransactionDto.fromEntity(transactionRepo.findById(id).get());
+            //traitement de compte
+            Optional<Compte> compte = compteRepo.findById(currentTransaction.getCompte().getId());
+            if(compte.isEmpty()){
+                log.warn("Enable to delete! Compte missing !");
+                throw new EntityNotFoundException(ErrorCodes.COMPTE_NOT_FOUND.getDescription(),ErrorCodes.COMPTE_NOT_FOUND);
+            }
+            CompteDto currentCompte = currentTransaction.getCompte();
+            Double balance = currentCompte.getCredit();
+            if(currentTransaction.getTypeTransaction() == TypeTransaction.GAIN){
+                if(currentTransaction.getPrixPaye()>balance){
+                    log.warn("Enable to delete! Balance insuffisante");
+                    throw new OutOfException("You have only "+balance+" in your balance",ErrorCodes.OUT_OF_MONEY,balance);
+                }
+                currentCompte.setCredit(balance - currentTransaction.getPrixPaye()) ;
+            }
+            else{
+                currentCompte.setCredit(balance + currentTransaction.getPrixPaye()) ;
+            }
+
+            compteRepo.save(CompteDto.toEntity(currentCompte));
+
+            //traitement de client et des dettes
+
+            Double dette = currentTransaction.getPrix() + currentTransaction.getPrixPaye();
+            if(currentTransaction.getAgent() != null){
+                Optional<Agent> agent = agentRepo.findById(currentTransaction.getAgent().getId());
+                if(agent.isEmpty()){
+                    log.warn("Enable to delete! Agent missing !");
+                    throw new EntityNotFoundException(ErrorCodes.AGENT_NOT_FOUND.getDescription(),ErrorCodes.AGENT_NOT_FOUND);
+                }
+                AgentDto agentDto = currentTransaction.getAgent();
+
+
+                Optional<Dette> detteEntity = detteRepo.findById(currentTransaction.getAgent().getDetteAutre().getId());
+                if(detteEntity.isEmpty()){
+                    log.warn("Enable to delete! Dette missing !");
+                    throw new EntityNotFoundException(ErrorCodes.DETTE_NOT_FOUND.getDescription(),ErrorCodes.DETTE_NOT_FOUND);
+                }
+                DetteDto detteObject = agentDto.getDetteAutre();
+
+                detteObject.setSome(detteObject.getSome() - dette);
+                detteRepo.save(DetteDto.toEntity(detteObject));
+            }
+            currentTransaction.setIsDeleted(true);
+            transactionRepo.save(TransactionDto.toEntity(currentTransaction));
+        }
+        else {
+            throw new EntityNotFoundException(ErrorCodes.TRANSACTION_NOT_FOUND.getDescription(),ErrorCodes.TRANSACTION_NOT_FOUND);
+        }
+    }
 }

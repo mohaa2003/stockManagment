@@ -256,6 +256,10 @@ public class AchatService {
 
             //Setting is Delete to true to do the logical deleting !
             currentAchat.setIsDeleted(true);
+            achatRepo.save(AchatDto.toEntity(currentAchat));
+        }
+        else {
+            throw new EntityNotFoundException(ErrorCodes.TRANSACTION_NOT_FOUND.getDescription(),ErrorCodes.TRANSACTION_NOT_FOUND);
         }
 
     }
