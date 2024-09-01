@@ -8,6 +8,8 @@ import com.stockManagment.api.dette.DetteRepo;
 import com.stockManagment.api.dette.DetteType;
 import com.stockManagment.api.exceptions.EntityNotFoundException;
 import com.stockManagment.api.exceptions.ErrorCodes;
+import com.stockManagment.api.exceptions.OutOfException;
+import com.stockManagment.api.transaction.TransactionDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,7 +30,53 @@ public class VersementService {
 
     @Transactional
     public Integer save(VersementDto versement) {
+    //Updating logic
+        if(versementRepo.existsById(versement.getId())){
+            VersementDto currentVersement = VersementDto.fromEntity(versementRepo.findById(versement.getId()).get());
 
+
+            Optional<Compte> compte = compteRepo.findById(currentVersement.getCompte().getId());
+            if(compte.isEmpty()){
+                log.warn("Can not update! Compte missing !");
+                throw new EntityNotFoundException(ErrorCodes.COMPTE_NOT_FOUND.getDescription(),ErrorCodes.COMPTE_NOT_FOUND);
+            }
+            CompteDto currentCompte = currentVersement.getCompte();
+            Double some = currentVersement.getSome();
+            Double balance = currentCompte.getCredit();
+            DetteType type = currentVersement.getTypeVersement();
+            if(type == DetteType.POUR){
+                if(balance < some){
+                    log.warn("Can not update ! Balance insuffisante");
+                    throw new OutOfException("You have only "+balance+" in your balance",ErrorCodes.OUT_OF_MONEY,balance);
+                }
+                currentCompte.setCredit(balance - some) ;
+            }
+            else{
+                currentCompte.setCredit(balance + some) ;
+            }
+
+            compteRepo.save(CompteDto.toEntity(currentCompte));
+
+            //traitement de dette
+
+            Optional<Dette> detteEntity = detteRepo.findById(currentVersement.getDette().getId());
+            if(detteEntity.isEmpty()){
+                log.warn("Can not update! Dette missing !");
+                throw new EntityNotFoundException(ErrorCodes.DETTE_NOT_FOUND.getDescription(),ErrorCodes.DETTE_NOT_FOUND);
+            }
+            DetteDto detteObject = currentVersement.getDette();
+            if(type == DetteType.POUR){
+                detteObject.setSome(detteObject.getSome() + some);
+            }
+            else{
+                detteObject.setSome(detteObject.getSome() - some);
+            }
+
+            detteRepo.save(DetteDto.toEntity(detteObject));
+
+        }
+
+//  New adding
         //traitement de compte
         Optional<Compte> compte = compteRepo.findById(versement.getCompte().getId());
         if(compte.isEmpty()){
@@ -43,6 +91,10 @@ public class VersementService {
             currentCompte.setCredit(balance + some) ;
         }
         else{
+            if(some>balance){
+                log.warn("Balance insuffisante");
+                throw new OutOfException("You have only "+balance+" in your balance",ErrorCodes.OUT_OF_MONEY,balance);
+            }
             currentCompte.setCredit(balance - some) ;
         }
 
@@ -83,4 +135,78 @@ public class VersementService {
         return versementRepo.findAll().stream().map(VersementDto::fromEntity).collect(Collectors.toList());
     }
 
+    @Transactional
+    public void delete(Integer id) {
+        if (id == null){
+            log.error("Transaction Id not valid");
+        }
+
+        if(versementRepo.existsById(id)){
+            VersementDto currentVersement = VersementDto.fromEntity(versementRepo.findById(id).get());
+
+
+            Optional<Compte> compte = compteRepo.findById(currentVersement.getCompte().getId());
+            if(compte.isEmpty()){
+                log.warn("Error! Compte missing !");
+                throw new EntityNotFoundException(ErrorCodes.COMPTE_NOT_FOUND.getDescription(),ErrorCodes.COMPTE_NOT_FOUND);
+            }
+            CompteDto currentCompte = currentVersement.getCompte();
+            Double some = currentVersement.getSome();
+            Double balance = currentCompte.getCredit();
+            DetteType type = currentVersement.getTypeVersement();
+            if(type == DetteType.POUR){
+                if(balance < some){
+                    log.warn("Error ! Balance insuffisante");
+                    throw new OutOfException("You have only "+balance+" in your balance",ErrorCodes.OUT_OF_MONEY,balance);
+                }
+                currentCompte.setCredit(balance - some) ;
+            }
+            else{
+                currentCompte.setCredit(balance + some) ;
+            }
+
+            compteRepo.save(CompteDto.toEntity(currentCompte));
+
+            //traitement de dette
+
+            Optional<Dette> detteEntity = detteRepo.findById(currentVersement.getDette().getId());
+            if(detteEntity.isEmpty()){
+                log.warn("Error! Dette missing !");
+                throw new EntityNotFoundException(ErrorCodes.DETTE_NOT_FOUND.getDescription(),ErrorCodes.DETTE_NOT_FOUND);
+            }
+            DetteDto detteObject = currentVersement.getDette();
+            if(type == DetteType.POUR){
+                detteObject.setSome(detteObject.getSome() + some);
+            }
+            else{
+                detteObject.setSome(detteObject.getSome() - some);
+            }
+
+            detteRepo.save(DetteDto.toEntity(detteObject));
+            
+        }
+        else {
+            throw new EntityNotFoundException(ErrorCodes.VERSEMENT_NOT_FOUND.getDescription(),ErrorCodes.VERSEMENT_NOT_FOUND);
+        }
+    }
+
+    public void deleteById(Integer id) {
+        if(id == null){
+            log.error("Versement id is null");
+        }
+        else{
+            if(versementRepo.existsById(id)){
+                VersementDto currentVersement = VersementDto.fromEntity(versementRepo.findById(id).get());
+                if(!currentVersement.getIsDeleted()){
+                    throw new EntityNotFoundException(ErrorCodes.VERSEMENT_NOT_FOUND.getDescription() + " logically deleted ! can't delete directly active one",ErrorCodes.VERSEMENT_NOT_FOUND);
+                }
+                else{
+                    versementRepo.deleteById(id);
+                }
+            }
+            else {
+                throw new EntityNotFoundException(ErrorCodes.VERSEMENT_NOT_FOUND.getDescription(),ErrorCodes.VERSEMENT_NOT_FOUND);
+            }
+        }
+    }
 }

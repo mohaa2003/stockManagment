@@ -32,4 +32,11 @@ public class AchatController {
         achatService.delete(id);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping
+        public ResponseEntity deleteById(@PathVariable Integer id){
+            achatService.deleteById(id);
+            return ResponseEntity.ok().build();
+        }
+
 }

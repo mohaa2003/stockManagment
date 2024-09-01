@@ -31,4 +31,10 @@ public class VenteController {
         venteService.delete(id);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping
+    public ResponseEntity deleteById(@PathVariable Integer id){
+        venteService.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }

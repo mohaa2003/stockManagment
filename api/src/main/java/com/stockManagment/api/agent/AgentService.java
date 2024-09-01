@@ -51,14 +51,23 @@ public class AgentService {
         }
         Optional<Agent> agent = agentRepo.findById(id);
         if(agent.isPresent()){
-            Optional<Dette> dette = detteRepo.findById(agent.get().getDette().getId());
+            AgentDto agentDto = AgentDto.fromEntity(agent.get());
+            Optional<Dette> dette = detteRepo.findById(agentDto.getDetteAutre().getId());
             if(dette.isPresent()){
                 DetteDto detteDto = DetteAutreDto.fromEntity(dette.get());
                 if (detteDto.getSome() != 0){
                     throw new OutOfException(ErrorCodes.HAS_DEBT.getDescription(),ErrorCodes.HAS_DEBT,detteDto.getSome());
                 }
             }
+            else{
+                log.error("Error ! dette doesn't  exist");
+                throw new EntityNotFoundException(ErrorCodes.DETTE_NOT_FOUND);
+            }
 
+        }
+        else{
+            log.error("Error ! agent doesn't  exist");
+            throw new EntityNotFoundException(ErrorCodes.AGENT_NOT_FOUND);
         }
         agentRepo.deleteById(id);
     }

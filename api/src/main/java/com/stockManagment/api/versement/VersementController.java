@@ -33,4 +33,9 @@ public class VersementController{
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping
+    public ResponseEntity deleteById(@PathVariable Integer id){
+        versementService.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }

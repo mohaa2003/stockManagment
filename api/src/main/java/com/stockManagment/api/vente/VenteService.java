@@ -1,6 +1,5 @@
 package com.stockManagment.api.vente;
 
-import com.stockManagment.api.achat.AchatDto;
 import com.stockManagment.api.client.Client;
 import com.stockManagment.api.client.ClientDto;
 import com.stockManagment.api.client.ClientRepo;
@@ -269,8 +268,28 @@ public class VenteService {
             venteRepo.save(VenteDto.toEntity(currentVente));
         }
         else {
-            throw new EntityNotFoundException(ErrorCodes.TRANSACTION_NOT_FOUND.getDescription(),ErrorCodes.TRANSACTION_NOT_FOUND);
+            throw new EntityNotFoundException(ErrorCodes.VENTE_NOT_FOUND.getDescription(),ErrorCodes.VENTE_NOT_FOUND);
         }
 
+    }
+
+    public void deleteById(Integer id) {
+        if(id == null){
+            log.error("Vente id is null");
+        }
+        else{
+            if(venteRepo.existsById(id)){
+                VenteDto currentVente = VenteDto.fromEntity(venteRepo.findById(id).get());
+                if(!currentVente.getIsDeleted()){
+                    throw new EntityNotFoundException(ErrorCodes.VENTE_NOT_FOUND.getDescription() + " logically deleted ! can't delete directly active one",ErrorCodes.VENTE_NOT_FOUND);
+                }
+                else{
+                    venteRepo.deleteById(id);
+                }
+            }
+            else {
+                throw new EntityNotFoundException(ErrorCodes.VENTE_NOT_FOUND.getDescription(),ErrorCodes.VENTE_NOT_FOUND);
+            }
+        }
     }
 }

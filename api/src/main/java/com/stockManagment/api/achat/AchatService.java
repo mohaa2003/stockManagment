@@ -59,6 +59,10 @@ public class AchatService {
                 }
                 ProduitDto produitDto = ligneAchatDto.getProduit();
                 Integer produitQtt = produitDto.getQuantiteDisponible();
+                if(ligneAchatDto.getQuantite() > produitQtt){
+                    log.warn("Insuffisant stock");
+                    throw new OutOfException(ErrorCodes.OUT_OF_STOCK.getDescription()+" you have only "+produitQtt,ErrorCodes.OUT_OF_STOCK,produitQtt);
+                }
                 produitDto.setQuantiteDisponible(produitQtt - ligneAchatDto.getQuantite());
                 produitRepo.save(ProduitDto.toEntity(produitDto));
 
@@ -210,6 +214,10 @@ public class AchatService {
                 }
                 ProduitDto produitDto = ligneAchatDto.getProduit();
                 Integer produitQtt = produitDto.getQuantiteDisponible();
+                if(ligneAchatDto.getQuantite() > produitQtt){
+                    log.warn("Insuffisant stock !");
+                    throw new OutOfException(ErrorCodes.OUT_OF_STOCK.getDescription()+" you have only "+produitQtt,ErrorCodes.OUT_OF_STOCK,produitQtt);
+                }
                 produitDto.setQuantiteDisponible(produitQtt - ligneAchatDto.getQuantite());
                 produitRepo.save(ProduitDto.toEntity(produitDto));
 
@@ -259,8 +267,28 @@ public class AchatService {
             achatRepo.save(AchatDto.toEntity(currentAchat));
         }
         else {
-            throw new EntityNotFoundException(ErrorCodes.TRANSACTION_NOT_FOUND.getDescription(),ErrorCodes.TRANSACTION_NOT_FOUND);
+            throw new EntityNotFoundException(ErrorCodes.ACHAT_NOT_FOUND.getDescription(),ErrorCodes.ACHAT_NOT_FOUND);
         }
 
+    }
+
+    public void deleteById(Integer id) {
+        if(id == null){
+            log.error("Achat id is null");
+        }
+        else{
+            if(achatRepo.existsById(id)){
+                AchatDto currentAchat = AchatDto.fromEntity(achatRepo.findById(id).get());
+                if(!currentAchat.getIsDeleted()){
+                    throw new EntityNotFoundException(ErrorCodes.ACHAT_NOT_FOUND.getDescription() + " logically deleted ! can't delete directly active one",ErrorCodes.ACHAT_NOT_FOUND);
+                }
+                else{
+                    achatRepo.deleteById(id);
+                }
+            }
+            else {
+                throw new EntityNotFoundException(ErrorCodes.ACHAT_NOT_FOUND.getDescription(),ErrorCodes.ACHAT_NOT_FOUND);
+            }
+        }
     }
 }

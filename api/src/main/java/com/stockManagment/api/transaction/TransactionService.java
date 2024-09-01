@@ -1,6 +1,5 @@
 package com.stockManagment.api.transaction;
 
-import com.stockManagment.api.achat.AchatDto;
 import com.stockManagment.api.agent.Agent;
 import com.stockManagment.api.agent.AgentDto;
 import com.stockManagment.api.agent.AgentRepo;
@@ -152,6 +151,7 @@ public class TransactionService {
         return transactionRepo.findAll().stream().map(TransactionDto::fromEntity).collect(Collectors.toList());
     }
 
+    @Transactional
     public void delete(Integer id) {
         if(transactionRepo.existsById(id)){
             TransactionDto currentTransaction = TransactionDto.fromEntity(transactionRepo.findById(id).get());
@@ -203,6 +203,26 @@ public class TransactionService {
         }
         else {
             throw new EntityNotFoundException(ErrorCodes.TRANSACTION_NOT_FOUND.getDescription(),ErrorCodes.TRANSACTION_NOT_FOUND);
+        }
+    }
+
+    public void deleteById(Integer id) {
+        if(id == null){
+            log.error("Transaction id is null");
+        }
+        else{
+            if(transactionRepo.existsById(id)){
+                TransactionDto currentTransaction = TransactionDto.fromEntity(transactionRepo.findById(id).get());
+                if(!currentTransaction.getIsDeleted()){
+                    throw new EntityNotFoundException(ErrorCodes.TRANSACTION_NOT_FOUND.getDescription() + " logically deleted ! can't delete directly active one",ErrorCodes.TRANSACTION_NOT_FOUND);
+                }
+                else{
+                    transactionRepo.deleteById(id);
+                }
+            }
+            else {
+                throw new EntityNotFoundException(ErrorCodes.TRANSACTION_NOT_FOUND.getDescription(),ErrorCodes.TRANSACTION_NOT_FOUND);
+            }
         }
     }
 }
