@@ -33,4 +33,11 @@ public class CompteController {
         compteService.delete(id);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping
+    public ResponseEntity deleteById(@PathVariable Integer id){
+        compteService.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
+
 }

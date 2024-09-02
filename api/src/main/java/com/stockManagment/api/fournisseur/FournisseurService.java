@@ -1,4 +1,5 @@
 package com.stockManagment.api.fournisseur;
+import com.stockManagment.api.achat.AchatDto;
 import com.stockManagment.api.dette.*;
 import com.stockManagment.api.exceptions.EntityNotFoundException;
 import com.stockManagment.api.exceptions.ErrorCodes;
@@ -56,17 +57,45 @@ public class FournisseurService {
         }
         Optional<Fournisseur> fournisseur = fournisseurRepo.findById(id);
         if(fournisseur.isPresent()){
-            Optional<Dette> dette = detteRepo.findById(fournisseur.get().getDette().getId());
+            FournisseurDto fournisseurDto = FournisseurDto.fromEntity(fournisseur.get());
+            Optional<Dette> dette = detteRepo.findById(fournisseurDto.getDetteFournisseur().getId());
             if(dette.isPresent()){
                 DetteDto detteDto = DetteFournisseurDto.fromEntity(dette.get());
                 if (detteDto.getSome() != 0){
                     throw new OutOfException(ErrorCodes.HAS_DEBT.getDescription(),ErrorCodes.HAS_DEBT,detteDto.getSome());
                 }
             }
-
+            else{
+                log.error("Error ! dette doesn't  exist");
+                throw new EntityNotFoundException(ErrorCodes.DETTE_NOT_FOUND.getDescription(),ErrorCodes.DETTE_NOT_FOUND);
+            }
+            fournisseurDto.setIsDeleted(true);
+            fournisseurRepo.save(FournisseurDto.toEntity(fournisseurDto));
         }
+        else{
+            log.error("Error ! fournisseur doesn't  exist");
+            throw new EntityNotFoundException(ErrorCodes.FOURNISSEUR_NOT_FOUND.getDescription(),ErrorCodes.FOURNISSEUR_NOT_FOUND);
+        }
+    }
 
-        fournisseurRepo.deleteById(id);
+    public void deleteById(Integer id) {
+        if(id == null){
+            log.error("Fournisseur id is null");
+        }
+        else{
+            if(fournisseurRepo.existsById(id)){
+                FournisseurDto currentFournisseur = FournisseurDto.fromEntity(fournisseurRepo.findById(id).get());
+                if(!currentFournisseur.getIsDeleted()){
+                    throw new EntityNotFoundException(ErrorCodes.FOURNISSEUR_NOT_FOUND.getDescription() + " logically deleted ! can't delete directly active one",ErrorCodes.FOURNISSEUR_NOT_FOUND);
+                }
+                else{
+                    fournisseurRepo.deleteById(id);
+                }
+            }
+            else {
+                throw new EntityNotFoundException(ErrorCodes.FOURNISSEUR_NOT_FOUND.getDescription(),ErrorCodes.FOURNISSEUR_NOT_FOUND);
+            }
+        }
     }
 }
 

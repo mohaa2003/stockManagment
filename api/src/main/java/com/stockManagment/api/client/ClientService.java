@@ -1,4 +1,5 @@
 package com.stockManagment.api.client;
+import com.stockManagment.api.achat.AchatDto;
 import com.stockManagment.api.dette.*;
 import com.stockManagment.api.exceptions.EntityNotFoundException;
 import com.stockManagment.api.exceptions.ErrorCodes;
@@ -51,15 +52,45 @@ public class ClientService {
         }
         Optional<Client> client = clientRepo.findById(id);
         if(client.isPresent()){
-            Optional<Dette> dette = detteRepo.findById(client.get().getDette().getId());
+            ClientDto clientDto = ClientDto.fromEntity(client.get());
+            Optional<Dette> dette = detteRepo.findById(clientDto.getDetteClient().getId());
             if(dette.isPresent()){
                 DetteDto detteDto = DetteClientDto.fromEntity(dette.get());
                 if (detteDto.getSome() != 0){
                     throw new OutOfException(ErrorCodes.HAS_DEBT.getDescription(),ErrorCodes.HAS_DEBT,detteDto.getSome());
                 }
             }
-
+            else{
+                log.error("Error ! dette doesn't  exist");
+                throw new EntityNotFoundException(ErrorCodes.DETTE_NOT_FOUND.getDescription(),ErrorCodes.DETTE_NOT_FOUND);
+            }
+            clientDto.setIsDeleted(true);
+            clientRepo.save((ClientDto.toEntity(clientDto)));
         }
-        clientRepo.deleteById(id);
+        else{
+            log.error("Error ! client doesn't  exist");
+            throw new EntityNotFoundException(ErrorCodes.CLIENT_NOT_FOUND.getDescription(),ErrorCodes.CLIENT_NOT_FOUND);
+        }
+    }
+
+    public void deleteById(Integer id) {
+        if(id == null){
+            log.error("Client id is null");
+        }
+        else{
+            if(clientRepo.existsById(id)){
+                ClientDto currentClient = ClientDto.fromEntity(clientRepo.findById(id).get());
+                if(!currentClient.getIsDeleted()){
+                    throw new EntityNotFoundException(ErrorCodes.CLIENT_NOT_FOUND.getDescription() + " logically deleted ! can't delete directly active one",ErrorCodes.CLIENT_NOT_FOUND);
+                }
+                else{
+                    clientRepo.deleteById(id);
+                }
+            }
+            else {
+                throw new EntityNotFoundException(ErrorCodes.CLIENT_NOT_FOUND.getDescription(),ErrorCodes.CLIENT_NOT_FOUND);
+            }
+        }
     }
 }
+

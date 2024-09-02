@@ -31,4 +31,11 @@ public class ProduitController {
         produitService.delete(id);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping
+    public ResponseEntity deleteById(@PathVariable Integer id){
+        produitService.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
+
 }

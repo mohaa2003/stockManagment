@@ -12,26 +12,33 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 public class CategorieController {
-    private final AgentService agentService;
+    private final CategorieService categorieService;
 
     @PostMapping
-    public ResponseEntity<Integer> save(@RequestBody @Valid AgentDto agent){
-        return ResponseEntity.ok(agentService.save(agent));
+    public ResponseEntity<Integer> save(@RequestBody @Valid CategorieDto categorie){
+        return ResponseEntity.ok(categorieService.save(categorie));
     }
 
     @GetMapping
-    public ResponseEntity<AgentDto> findById(@PathVariable Integer id){
-        return ResponseEntity.ok(agentService.findById(id));
+    public ResponseEntity<CategorieDto> findById(@PathVariable Integer id){
+        return ResponseEntity.ok(categorieService.findById(id));
     }
 
     @GetMapping
-    public ResponseEntity<List<AgentDto>> findAll(){
-        return ResponseEntity.ok(agentService.findAll());
+    public ResponseEntity<List<CategorieDto>> findAll(){
+        return ResponseEntity.ok(categorieService.findAll());
     }
 
     @DeleteMapping
     public ResponseEntity delete(@PathVariable Integer id){
-        agentService.delete(id);
+        categorieService.delete(id);
         return ResponseEntity.ok().build();
     }
+
+//    @DeleteMapping
+//    public ResponseEntity deleteById(@PathVariable Integer id){
+//        categorieService.deleteById(id);
+//        return ResponseEntity.ok().build();
+//    }
+
 }

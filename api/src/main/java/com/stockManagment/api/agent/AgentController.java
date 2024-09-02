@@ -32,4 +32,10 @@ import java.util.List;
         agentService.delete(id);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping
+    public ResponseEntity deleteById(@PathVariable Integer id){
+        agentService.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -1,4 +1,5 @@
 package com.stockManagment.api.agent;
+import com.stockManagment.api.achat.AchatDto;
 import com.stockManagment.api.dette.*;
 import com.stockManagment.api.exceptions.EntityNotFoundException;
 import com.stockManagment.api.exceptions.ErrorCodes;
@@ -61,14 +62,35 @@ public class AgentService {
             }
             else{
                 log.error("Error ! dette doesn't  exist");
-                throw new EntityNotFoundException(ErrorCodes.DETTE_NOT_FOUND);
+                throw new EntityNotFoundException(ErrorCodes.DETTE_NOT_FOUND.getDescription(),ErrorCodes.DETTE_NOT_FOUND);
             }
-
+            agentDto.setIsDeleted(true);
+            agentRepo.save(AgentDto.toEntity(agentDto));
         }
         else{
             log.error("Error ! agent doesn't  exist");
-            throw new EntityNotFoundException(ErrorCodes.AGENT_NOT_FOUND);
+            throw new EntityNotFoundException(ErrorCodes.AGENT_NOT_FOUND.getDescription(),ErrorCodes.AGENT_NOT_FOUND);
         }
-        agentRepo.deleteById(id);
+    }
+
+    public void deleteById(Integer id) {
+        if(id == null){
+            log.error("Agent id is null");
+        }
+        else{
+            if(agentRepo.existsById(id)){
+                AgentDto currentAgent = AgentDto.fromEntity(agentRepo.findById(id).get());
+                if(!currentAgent.getIsDeleted()){
+                    throw new EntityNotFoundException(ErrorCodes.AGENT_NOT_FOUND.getDescription() + " logically deleted ! can't delete directly active one",ErrorCodes.AGENT_NOT_FOUND);
+                }
+                else{
+                    agentRepo.deleteById(id);
+                }
+            }
+            else {
+                throw new EntityNotFoundException(ErrorCodes.AGENT_NOT_FOUND.getDescription(),ErrorCodes.AGENT_NOT_FOUND);
+            }
+        }
     }
 }
+
